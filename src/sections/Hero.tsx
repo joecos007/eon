@@ -21,7 +21,6 @@ export function Hero() {
   if (!heroConfig.title) return null;
 
   useEffect(() => {
-    // Entry animation on load
     const tl = gsap.timeline({ delay: 0.2 });
 
     // Image scale + fade
@@ -31,36 +30,26 @@ export function Hero() {
       { scale: 1, opacity: 1, duration: 1.8, ease: 'expo.out' }
     );
 
-    // Badge fade + slide up
+    // Badge fade + slide down
     tl.fromTo(
       badgeRef.current,
-      { y: 20, opacity: 0 },
+      { y: -20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' },
       '-=1.2'
     );
 
-    // Title characters animation
-    if (titleRef.current) {
-      const chars = titleRef.current.querySelectorAll('.char');
-      tl.fromTo(
-        chars,
-        { rotateY: -90, y: 60, opacity: 0 },
-        {
-          rotateY: 0,
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: 'back.out(1.7)',
-        },
-        '-=1.4'
-      );
-    }
+    // Title fade up
+    tl.fromTo(
+      titleRef.current,
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: 'expo.out' },
+      '-=0.8'
+    );
 
     // Subtitle blur reveal
     tl.fromTo(
       subtitleRef.current,
-      { filter: 'blur(20px)', opacity: 0 },
+      { filter: 'blur(12px)', opacity: 0 },
       { filter: 'blur(0px)', opacity: 1, duration: 0.8, ease: 'power2.out' },
       '-=0.6'
     );
@@ -77,8 +66,8 @@ export function Hero() {
     tl.fromTo(
       lineRef.current,
       { height: 0 },
-      { height: 200, duration: 1.5, ease: 'expo.inOut' },
-      '-=0.8'
+      { height: 120, duration: 1.2, ease: 'expo.inOut' },
+      '-=0.6'
     );
 
     // Copyright fade
@@ -86,12 +75,12 @@ export function Hero() {
       copyrightRef.current,
       { y: 20, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' },
-      '-=1'
+      '-=0.8'
     );
 
     setLoaded(true);
 
-    // Scroll effects
+    // Scroll effects — parallax on the background image
     const trigger1 = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: 'top top',
@@ -108,37 +97,28 @@ export function Hero() {
     });
     triggersRef.current.push(trigger1);
 
+    // Scroll effect — title fades out
     const trigger2 = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top top',
-      end: '30% top',
-      scrub: 1,
-      onUpdate: (self) => {
-        if (titleRef.current) {
-          gsap.set(titleRef.current, {
-            rotateX: -15 * self.progress,
-            z: -100 * self.progress,
-          });
-        }
-      },
-    });
-    triggersRef.current.push(trigger2);
-
-    const trigger3 = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: '10% top',
       end: '40% top',
       scrub: 1,
       onUpdate: (self) => {
-        if (subtitleRef.current) {
-          gsap.set(subtitleRef.current, {
+        if (titleRef.current) {
+          gsap.set(titleRef.current, {
             opacity: 1 - self.progress,
             y: -30 * self.progress,
           });
         }
+        if (subtitleRef.current) {
+          gsap.set(subtitleRef.current, {
+            opacity: 1 - self.progress,
+            y: -20 * self.progress,
+          });
+        }
       },
     });
-    triggersRef.current.push(trigger3);
+    triggersRef.current.push(trigger2);
 
     return () => {
       tl.kill();
@@ -147,20 +127,18 @@ export function Hero() {
     };
   }, []);
 
-  const titleChars = heroConfig.title.split('');
-
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="relative h-screen w-full overflow-hidden perspective-container"
-      style={{ perspective: '1200px' }}
+      className="relative h-screen w-full overflow-hidden"
     >
+      {/* Subtle bottom gradient for text legibility */}
       <div
-        className="absolute inset-0 z-10 pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-[45%] z-10 pointer-events-none"
         style={{
           background:
-            'radial-gradient(circle at center, rgba(201,165,90,0.15) 0%, transparent 25%, rgba(0,0,0,0.8) 100%)',
+            'linear-gradient(to top, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.2) 40%, transparent 100%)',
         }}
       />
 
@@ -168,133 +146,90 @@ export function Hero() {
       <div
         ref={imageRef}
         className="absolute inset-0 z-0"
-        style={{
-          willChange: 'transform, opacity',
-        }}
+        style={{ willChange: 'transform, opacity' }}
       >
         <img
           src={heroConfig.backgroundImage}
           alt="Hero"
           className="w-full h-full object-cover"
-          style={{ filter: 'brightness(0.9)' }}
-        />
-        {/* Chromatic aberration effect layers */}
-        <div
-          className="absolute inset-0 mix-blend-multiply opacity-50"
-          style={{
-            backgroundImage: `url(${heroConfig.backgroundImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            transform: 'translateX(-2px)',
-            filter: 'url(#red-channel)',
-          }}
         />
       </div>
 
-      {/* Content container */}
-      <div
-        className="relative z-20 h-full w-full flex flex-col justify-center items-center px-8"
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        {/* Handcrafted Badge */}
+      {/* Badge — top center */}
+      <div className="absolute top-24 pt-safe left-1/2 -translate-x-1/2 z-20 w-max max-w-[90vw]">
         <div
           ref={badgeRef}
-          className="mb-8 px-6 py-2 rounded-full border border-gold/30 bg-black/40 backdrop-blur-md"
+          className="px-5 md:px-6 py-2 rounded border border-white/20 bg-black/20 backdrop-blur-md"
         >
-          <span className="text-body-sm font-medium tracking-[0.2em] uppercase shimmer-text">
+          <span className="text-body-sm font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase shimmer-text text-center block">
             Handcrafted Jewelry
           </span>
         </div>
+      </div>
 
-        {/* Main title */}
+      {/* Title & Subtitle — bottom left, not blocking faces */}
+      <div className="absolute bottom-28 pb-safe left-6 md:left-8 lg:left-16 z-20 max-w-[90vw] md:max-w-xl">
         <h1
           ref={titleRef}
-          className="text-[120px] md:text-[168px] font-medium text-white tracking-tight mb-4 preserve-3d"
+          className="text-h2 md:text-h1 lg:text-display-xl font-medium text-white tracking-tight mb-4 lg:mb-3 leading-[1.1]"
           style={{
-            textShadow: '0 0 80px rgba(201, 165, 90, 0.4)',
-            willChange: 'transform',
+            textShadow: '0 4px 30px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3)',
+            willChange: 'transform, opacity',
+            wordBreak: 'keep-all',
           }}
         >
-          {titleChars.map((char, i) => (
-            <span
-              key={i}
-              className="char inline-block"
-              style={{
-                transform: `translateY(${(i % 2 === 0 ? -1 : 1) * 8}px)`,
-              }}
-            >
-              {char}
-            </span>
-          ))}
+          {heroConfig.title}
         </h1>
 
-        {/* Subtitle */}
         <p
           ref={subtitleRef}
-          className="text-h3 font-extralight text-white/80 tracking-[0.3em] uppercase text-center max-w-2xl"
-          style={{ willChange: 'filter, opacity' }}
+          className="text-body md:text-body-lg lg:text-h5 font-light text-white/90 tracking-[0.1em] lg:tracking-[0.15em] uppercase bg-black/40 lg:bg-black/25 backdrop-blur-md px-4 py-2 lg:px-5 lg:py-1.5 rounded inline-block"
+          style={{
+            willChange: 'filter, opacity',
+          }}
         >
           {heroConfig.subtitle}
         </p>
-
-        {/* Decorative accent line */}
-        <div
-          className="absolute left-1/2 bottom-32 w-px bg-gradient-to-b from-gold/0 via-gold to-gold/0 z-30"
-          ref={lineRef}
-          style={{
-            transform: 'translateX(-50%)',
-            willChange: 'height',
-          }}
-        />
-
-        {/* Scroll down indicator */}
-        <div className="absolute left-1/2 bottom-12 z-30 transform -translate-x-1/2 text-gold animate-bounce-subtle">
-          <ChevronDown className="w-8 h-8 opacity-60" />
-        </div>
       </div>
 
-      {/* Services label - vertical left */}
+      {/* Decorative accent line — bottom center */}
+      <div
+        className="absolute left-1/2 bottom-28 w-px bg-gradient-to-b from-gold/0 via-gold to-gold/0 z-20"
+        ref={lineRef}
+        style={{
+          transform: 'translateX(-50%)',
+          willChange: 'height',
+        }}
+      />
+
+      {/* Scroll down indicator */}
+      <div className="absolute left-1/2 bottom-10 z-20 transform -translate-x-1/2 text-gold animate-bounce-subtle">
+        <ChevronDown className="w-7 h-7 opacity-60" />
+      </div>
+
+      {/* Services label — vertical left */}
       <div
         ref={servicesRef}
-        className="absolute left-8 bottom-32 z-30 flex flex-col items-center gap-4"
-        style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+        className="absolute left-8 bottom-32 z-20 hidden lg:flex flex-col items-center gap-4"
+        style={{
+          writingMode: 'vertical-rl',
+          textOrientation: 'mixed',
+          textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+        }}
       >
-        <span className="text-body-sm text-white/60 tracking-widest">
+        <span className="text-body-sm text-white/80 tracking-widest">
           {heroConfig.servicesLabel}
         </span>
       </div>
 
-      {/* Copyright - bottom right */}
+      {/* Copyright — bottom right */}
       <div
         ref={copyrightRef}
-        className="absolute right-8 bottom-8 z-30"
+        className="absolute right-8 bottom-8 z-20"
+        style={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
       >
-        <span className="text-body-sm text-white/40">{heroConfig.copyright}</span>
+        <span className="text-body-sm text-white/70">{heroConfig.copyright}</span>
       </div>
-
-      {/* SVG filters for chromatic aberration */}
-      <svg className="absolute w-0 h-0">
-        <defs>
-          <filter id="red-channel">
-            <feColorMatrix
-              type="matrix"
-              values="1 0 0 0 0
-                      0 0 0 0 0
-                      0 0 0 0 0
-                      0 0 0 1 0"
-            />
-          </filter>
-          <filter id="blue-channel">
-            <feColorMatrix
-              type="matrix"
-              values="0 0 0 0 0
-                      0 0 0 0 0
-                      0 0 1 0 0
-                      0 0 0 1 0"
-            />
-          </filter>
-        </defs>
-      </svg>
-    </section >
+    </section>
   );
 }

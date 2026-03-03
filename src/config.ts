@@ -9,8 +9,8 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  title: "Eon | A Timeless Glow",
-  description: "Eon Jewelry - Handcrafted timeless pieces by Reena Koirala and Priya Laishangbam. Zen minimalistic jewelry that tells your story.",
+  title: "Lumora | Handcrafted Radiance",
+  description: "Lumora - Handcrafted radiant jewelry by Reena Koirala and Priya Laishangbam. Bespoke pieces that capture your story in precious metals and stones.",
   language: "en",
 };
 
@@ -29,7 +29,7 @@ export interface NavigationConfig {
 }
 
 export const navigationConfig: NavigationConfig = {
-  logo: "EON",
+  logo: "LUMORA",
   items: [
     { label: "Collections", href: "#works" },
     { label: "Our Story", href: "#about" },
@@ -52,11 +52,11 @@ export interface HeroConfig {
 }
 
 export const heroConfig: HeroConfig = {
-  title: "EON",
-  subtitle: "A timeless glow. R&P.",
-  backgroundImage: "/hero-section.png",
-  servicesLabel: "Handcrafted | Timeless | Story",
-  copyright: "© 2024 Eon Jewelry",
+  title: "LUMORA",
+  subtitle: "Handcrafted Radiance by R & P",
+  backgroundImage: "/hero-asset.png",
+  servicesLabel: "Handcrafted | Radiant | Bespoke",
+  copyright: "© 2025 Lumora",
 };
 
 // ============================================================================
@@ -79,14 +79,14 @@ export interface AboutConfig {
 export const aboutConfig: AboutConfig = {
   titleLine1: "From different worlds, we found unity in creating",
   titleLine2: "beauty that transcends time and tells your story.",
-  description: "Eon was born from the serendipitous meeting of two friends with vastly different paths. Reena Koirala spent years working in the healthcare industry, where she developed an eye for detail and a deep appreciation for the delicate moments of human connection. Priya Laishangbam soared the skies as an air hostess, collecting inspiration from cultures around the world and discovering beauty in unexpected places. Together, they found a shared passion: crafting jewelry that captures the essence of timeless elegance. Each piece reflects Reena's precision and care, blended with Priya's global perspective and artistic vision. Eon is more than jewelry—it's a celebration of friendship, courage, and the eternal glow that resides within us all.",
-  image1: "/about-1.jpg",
-  image1Alt: "The Eon atelier where each piece is handcrafted with precision",
-  image2: "/about-2.jpg",
-  image2Alt: "Delicate Eon jewelry adorning elegant hands",
+  description: "Lumora was born from the serendipitous meeting of two friends with vastly different paths. Reena Koirala spent years working in the healthcare industry, where she developed an eye for detail and a deep appreciation for the delicate moments of human connection. Priya Laishangbam soared the skies as an air hostess, collecting inspiration from cultures around the world and discovering beauty in unexpected places. Together, they found a shared passion: crafting jewelry that captures the essence of timeless elegance. Each piece reflects Reena's precision and care, blended with Priya's global perspective and artistic vision. Lumora is more than jewelry—it's a celebration of friendship, courage, and the radiance that resides within us all.",
+  image1: "/ghibli-bg-1.png",
+  image1Alt: "The Lumora atelier where each piece is handcrafted with precision",
+  image2: "/ghibli-bg-2.png",
+  image2Alt: "Delicate Lumora jewelry adorning elegant hands",
   authorImage: "/photographer.jpg",
   authorName: "Reena & Priya",
-  authorBio: "Two friends, two journeys, one vision. Reena brings the precision of healthcare, Priya brings the perspective of the skies—together, we craft pieces that remind you of your own timeless glow.",
+  authorBio: "Two friends, two journeys, one vision. Reena brings the precision of healthcare, Priya brings the perspective of the skies—together, we craft pieces that remind you of your own inner radiance.",
 };
 
 // ============================================================================
@@ -167,7 +167,7 @@ export const servicesConfig: ServicesConfig = {
     {
       id: "02",
       title: "Artisan Crafting",
-      description: "Each Eon piece is meticulously handcrafted in our studio using traditional techniques passed down through generations of master jewelers.",
+      description: "Each Lumora piece is meticulously handcrafted in our studio using traditional techniques passed down through generations of master jewelers.",
       image: "/service-2.jpg"
     },
     {
@@ -207,23 +207,23 @@ export const testimonialsConfig: TestimonialsConfig = {
   testimonials: [
     {
       id: 1,
-      name: "Margaret Wong",
+      name: "Lily Thangjam",
       title: "Art Collector",
-      quote: "Eon doesn't just create jewelry—they capture moments in metal and stone. My custom piece tells my grandmother's story, and I wear it close to my heart every day.",
+      quote: "Lumora doesn't just create jewelry—they capture precious moments in metal and stone. My custom piece is a beautiful reminder of my grandmother's enduring love.",
       image: "/testimonial-1.jpg"
     },
     {
       id: 2,
-      name: "Lily Tanaka",
+      name: "Merina Oinam",
       title: "Bride",
-      quote: "Reena and Priya understood exactly what I wanted for my wedding day. My earrings weren't just accessories—they were the finishing touch that made me feel like myself.",
+      quote: "Reena and Priya understood exactly what I wanted for my wedding day. The earrings they crafted were not just accessories, but a deeply personal talisman for me.",
       image: "/testimonial-2.jpg"
     },
     {
       id: 3,
-      name: "Sarah Lim",
+      name: "Zerina Angom",
       title: "Interior Designer",
-      quote: "As someone who appreciates fine craftsmanship, I deeply value the precision and artistry that goes into every Eon piece. Their attention to detail mirrors the dedication I bring to my own work.",
+      quote: "As an admirer of fine craftsmanship, I deeply value the precision and artistry in every Lumora piece. Their attention to detail perfectly mirrors my own passion.",
       image: "/testimonial-3.jpg"
     },
   ],
@@ -430,7 +430,7 @@ export const contactConfig: ContactConfig = {
   ],
   messageLabel: "Tell us your story",
   submitButtonText: "Send Message",
-  image: "/contact.jpg",
+  image: "/ghibli-bg-1.png",
 };
 
 // ============================================================================
@@ -455,8 +455,8 @@ export interface FooterConfig {
 }
 
 export const footerConfig: FooterConfig = {
-  marqueeText: "A Timeless Glow Lives Within You",
-  marqueeHighlightChars: ["T", "G", "Y"],
+  marqueeText: "Radiance Crafted With Love",
+  marqueeHighlightChars: ["R", "C", "L"],
   navLinks1: [
     { label: "Home", href: "#hero" },
     { label: "Collections", href: "#works" },
@@ -469,6 +469,6 @@ export const footerConfig: FooterConfig = {
   ],
   ctaText: "Begin Your Journey",
   ctaHref: "#contact",
-  copyright: "© 2024 Eon Jewelry. All rights reserved.",
-  tagline: "Crafted with precision, worn with love.",
+  copyright: "© 2025 Lumora. All rights reserved.",
+  tagline: "Handcrafted with intention, worn with radiance.",
 };

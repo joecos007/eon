@@ -12,7 +12,14 @@ export function Works() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsTouchDevice(window.innerWidth < 768 || window.matchMedia('(hover: none)').matches);
+    }
+  }, []);
 
   if (!worksConfig.title || worksConfig.projects.length === 0) return null;
 
@@ -101,6 +108,8 @@ export function Works() {
     e: React.MouseEvent<HTMLDivElement>,
     index: number
   ) => {
+    if (isTouchDevice) return;
+
     const card = cardsRef.current[index];
     if (!card) return;
 
@@ -117,6 +126,11 @@ export function Works() {
   };
 
   const handleMouseLeave = (index: number) => {
+    if (isTouchDevice) {
+      setHoveredIndex(null);
+      return;
+    }
+
     const card = cardsRef.current[index];
     if (!card) return;
 
@@ -135,14 +149,14 @@ export function Works() {
     <section
       ref={sectionRef}
       id="works"
-      className="relative py-32 px-8 lg:px-16 bg-[#0d0b08] overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-[#0d0b08] overflow-hidden"
       style={{ perspective: '1200px' }}
     >
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-16 relative">
         <h2
           ref={titleRef}
-          className="text-h1 lg:text-display-xl text-white font-medium mb-6 relative z-10"
+          className="text-h2 md:text-h1 lg:text-display-xl text-white font-medium mb-6 relative z-10"
         >
           {titleChars.map((char, i) => (
             <span key={i} className="char inline-block">

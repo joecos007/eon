@@ -13,6 +13,13 @@ export function Services() {
   const imageRef = useRef<HTMLDivElement>(null);
   const imagePreviewRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsTouchDevice(window.matchMedia('(hover: none)').matches);
+    }
+  }, []);
   const mousePos = useRef({ x: 0, y: 0 });
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
@@ -56,18 +63,30 @@ export function Services() {
             const line = item.querySelector('.service-line');
             const number = item.querySelector('.service-number');
 
-            tl.fromTo(
-              line,
-              { width: 0 },
-              { width: '100%', duration: 1, ease: 'expo.inOut' },
-              `-=${0.8 - i * 0.2}`
-            );
+            if (line) {
+              tl.fromTo(
+                line,
+                { width: 0 },
+                { width: '100%', duration: 1, ease: 'expo.inOut' },
+                `-=${0.8 - i * 0.2}`
+              );
+            }
 
+            if (number) {
+              tl.fromTo(
+                number,
+                { scale: 0.5, opacity: 0 },
+                { scale: 1, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)' },
+                `-=0.7`
+              );
+            }
+
+            // Animate the whole item as fallback
             tl.fromTo(
-              number,
-              { scale: 0.5, opacity: 0 },
-              { scale: 1, opacity: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)' },
-              `-=0.7`
+              item,
+              { y: 30, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' },
+              `-=${0.5 - i * 0.1}`
             );
           }
         });
@@ -82,7 +101,10 @@ export function Services() {
     };
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  // Custom cursor follow for image preview
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (isTouchDevice) return;
+    if (!imagePreviewRef.current) return;
     const section = sectionRef.current;
     if (!section || !imageRef.current) return;
 
@@ -100,6 +122,7 @@ export function Services() {
   };
 
   const handleItemEnter = (index: number) => {
+    if (isTouchDevice) return;
     setActiveIndex(index);
     if (imageRef.current) {
       gsap.to(imageRef.current, {
@@ -129,7 +152,7 @@ export function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative py-32 px-8 lg:px-16 bg-black overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       {/* Floating image preview */}
@@ -152,7 +175,7 @@ export function Services() {
         <div className="mb-20">
           <h2
             ref={titleRef}
-            className="text-h1 lg:text-display-xl text-white font-medium mb-6"
+            className="text-h2 md:text-h1 lg:text-display-xl text-white font-medium mb-6"
           >
             {servicesConfig.title}
           </h2>
@@ -180,7 +203,7 @@ export function Services() {
                   {String(index + 1).padStart(2, '0')}.
                 </span>
                 <h3
-                  className={`text-h3 lg:text-h2 text-white font-normal transition-all duration-400 ${activeIndex !== null && activeIndex !== index
+                  className={`text-h4 md:text-h3 lg:text-h2 text-white font-normal transition-all duration-400 ${activeIndex !== null && activeIndex !== index
                     ? 'opacity-30'
                     : 'opacity-100'
                     } ${activeIndex === index
@@ -200,8 +223,8 @@ export function Services() {
 
               {/* Description */}
               <p
-                className={`hidden lg:block text-body text-white/40 max-w-xs text-right transition-opacity duration-300 ${activeIndex !== null && activeIndex !== index
-                  ? 'opacity-30'
+                className={`mt-4 lg:mt-0 text-body-sm md:text-body text-white/60 lg:text-white/40 lg:max-w-xs lg:text-right transition-opacity duration-300 ${activeIndex !== null && activeIndex !== index
+                  ? 'lg:opacity-30'
                   : 'opacity-100'
                   }`}
               >

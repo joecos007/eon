@@ -13,9 +13,8 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  if (!faqConfig.title || faqConfig.faqs.length === 0) return null;
-
   useEffect(() => {
+    if (!faqConfig.title || faqConfig.faqs.length === 0) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -59,17 +58,19 @@ export function FAQ() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  if (!faqConfig.title || faqConfig.faqs.length === 0) return null;
+
   return (
     <section
       ref={sectionRef}
       id="faq"
-      className="relative py-32 px-8 lg:px-16 bg-black overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Section title */}
         <h2
           ref={titleRef}
-          className="text-h1 lg:text-display-xl text-white font-medium text-center mb-20"
+          className="text-h2 md:text-h1 lg:text-display-xl text-white font-medium text-center mb-12 md:mb-20"
         >
           {faqConfig.title}
         </h2>

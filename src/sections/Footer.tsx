@@ -95,7 +95,7 @@ export function Footer() {
   return (
     <footer
       ref={sectionRef}
-      className="relative pt-20 pb-12 px-8 lg:px-16 bg-black overflow-hidden"
+      className="relative pt-16 md:pt-20 pb-8 md:pb-12 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
     >
       {/* Marquee section */}
       <div
@@ -108,7 +108,7 @@ export function Footer() {
 
         {/* Marquee content */}
         <div className="marquee-container">
-          <div className="marquee-content flex items-center gap-8 text-[56px] lg:text-[112px] font-medium whitespace-nowrap">
+          <div className="marquee-content flex items-center gap-4 md:gap-8 text-[36px] md:text-[56px] lg:text-[112px] font-medium whitespace-nowrap">
             {[...Array(4)].map((_, i) => (
               <span key={i} className="flex items-center gap-8">
                 {marqueeText.split('').map((char, j) => (
@@ -219,6 +219,11 @@ export function Footer() {
           </p>
           <p className="text-body-sm text-white/30">
             {footerConfig.tagline}
+          </p>
+        </div>
+        <div className="mt-4 text-center">
+          <p className="text-body-sm text-white/25 tracking-wide">
+            Fueled by Caffeine &amp; Code. Crafted by <span className="text-gold/60">Oliver Oinam</span>
           </p>
         </div>
       </div>

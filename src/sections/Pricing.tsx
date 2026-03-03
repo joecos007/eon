@@ -161,14 +161,14 @@ export function Pricing() {
     <section
       ref={sectionRef}
       id="pricing"
-      className="relative py-32 px-8 lg:px-16 bg-black overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <h2
             ref={titleRef}
-            className="text-h1 lg:text-display-xl text-white font-medium mb-4"
+            className="text-h2 md:text-h1 lg:text-display-xl text-white font-medium mb-4"
           >
             {pricingConfig.title}
           </h2>
@@ -185,7 +185,7 @@ export function Pricing() {
               ref={(el) => {
                 cardsRef.current[index] = el;
               }}
-              className={`relative p-8 lg:p-12 rounded-2xl flex flex-col transition-all duration-500 hover-lift preserve-3d
+              className={`relative p-6 lg:p-12 rounded-2xl flex flex-col transition-all duration-500 hover-lift preserve-3d
                 ${plan.featured
                   ? 'border border-gold/40 bg-gradient-to-br from-[#1a1814] to-black transform lg:scale-105 z-10'
                   : 'luxury-glass backdrop-blur-md opacity-90 hover:opacity-100'
@@ -214,7 +214,7 @@ export function Pricing() {
 
               {/* Plan name */}
               <h3
-                className={`text-h5 mb-6 ${plan.featured ? 'text-black' : 'text-white/80'
+                className={`text-h5 mb-6 ${plan.featured ? 'text-gold' : 'text-white/80'
                   }`}
               >
                 {plan.name}

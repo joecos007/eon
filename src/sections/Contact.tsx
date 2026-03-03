@@ -152,16 +152,16 @@ export function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const titleChars = contactConfig.title.split('');
+  const titleWords = contactConfig.title.split(' ');
 
   return (
     <section
       ref={sectionRef}
       id="contact"
-      className="relative py-32 px-8 lg:px-16 bg-black overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 lg:gap-20 relative">
           {/* Diagonal divider */}
           <div
             ref={dividerRef}
@@ -179,14 +179,18 @@ export function Contact() {
             onSubmit={handleSubmit}
             className="relative z-10"
           >
-            {/* Title */}
+            {/* Title — split by words to prevent mid-word breaks */}
             <h2
               ref={titleRef}
-              className="text-h2 lg:text-h1 text-white font-medium mb-4"
+              className="text-h2 lg:text-h1 text-white font-medium mb-4 leading-tight"
             >
-              {titleChars.map((char, i) => (
-                <span key={i} className="char inline-block">
-                  {char}
+              {titleWords.map((word, wi) => (
+                <span key={wi} className="inline-block mr-[0.3em]">
+                  {word.split('').map((char, ci) => (
+                    <span key={ci} className="char inline-block">
+                      {char}
+                    </span>
+                  ))}
                 </span>
               ))}
             </h2>
@@ -194,13 +198,13 @@ export function Contact() {
             {/* Subtitle */}
             <p
               ref={subtitleRef}
-              className="text-body-lg text-white/60 mb-12"
+              className="text-body-lg text-white/60 mb-10 max-w-md"
             >
               {contactConfig.subtitle}
             </p>
 
             {/* Form fields */}
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Name */}
               <div
                 ref={(el) => {
@@ -209,9 +213,7 @@ export function Contact() {
                 className="relative"
               >
                 <label
-                  className={`absolute left-0 transition-all duration-200 ${focusedField === 'name' || formData.name
-                      ? '-top-6 text-body-sm text-gold'
-                      : 'top-3 text-body text-white/50'
+                  className={`block text-body-sm font-medium mb-2 transition-colors duration-200 ${focusedField === 'name' ? 'text-gold' : 'text-white/50'
                     }`}
                 >
                   {contactConfig.nameLabel}
@@ -223,12 +225,12 @@ export function Contact() {
                   onChange={handleInputChange}
                   onFocus={() => setFocusedField('name')}
                   onBlur={() => setFocusedField(null)}
-                  className="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-colors duration-300"
-                  required
-                />
-                <div
-                  className={`absolute bottom-0 left-0 h-px transition-all duration-300 ${focusedField === 'name' ? 'w-full bg-gold' : 'w-0 bg-white'
+                  placeholder="Your full name"
+                  className={`w-full bg-white/5 border px-4 py-3 text-white placeholder:text-white/25 focus:outline-none transition-all duration-300 ${focusedField === 'name'
+                    ? 'border-gold bg-white/8'
+                    : 'border-white/15 hover:border-white/30'
                     }`}
+                  required
                 />
               </div>
 
@@ -240,9 +242,7 @@ export function Contact() {
                 className="relative"
               >
                 <label
-                  className={`absolute left-0 transition-all duration-200 ${focusedField === 'email' || formData.email
-                      ? '-top-6 text-body-sm text-gold'
-                      : 'top-3 text-body text-white/50'
+                  className={`block text-body-sm font-medium mb-2 transition-colors duration-200 ${focusedField === 'email' ? 'text-gold' : 'text-white/50'
                     }`}
                 >
                   {contactConfig.emailLabel}
@@ -254,12 +254,12 @@ export function Contact() {
                   onChange={handleInputChange}
                   onFocus={() => setFocusedField('email')}
                   onBlur={() => setFocusedField(null)}
-                  className="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-colors duration-300"
-                  required
-                />
-                <div
-                  className={`absolute bottom-0 left-0 h-px transition-all duration-300 ${focusedField === 'email' ? 'w-full bg-gold' : 'w-0 bg-white'
+                  placeholder="your@email.com"
+                  className={`w-full bg-white/5 border px-4 py-3 text-white placeholder:text-white/25 focus:outline-none transition-all duration-300 ${focusedField === 'email'
+                    ? 'border-gold bg-white/8'
+                    : 'border-white/15 hover:border-white/30'
                     }`}
+                  required
                 />
               </div>
 
@@ -271,34 +271,39 @@ export function Contact() {
                 className="relative"
               >
                 <label
-                  className={`absolute left-0 transition-all duration-200 ${focusedField === 'projectType' || formData.projectType
-                      ? '-top-6 text-body-sm text-gold'
-                      : 'top-3 text-body text-white/50'
+                  className={`block text-body-sm font-medium mb-2 transition-colors duration-200 ${focusedField === 'projectType' ? 'text-gold' : 'text-white/50'
                     }`}
                 >
                   {contactConfig.projectTypeLabel}
                 </label>
-                <select
-                  name="projectType"
-                  value={formData.projectType}
-                  onChange={handleInputChange}
-                  onFocus={() => setFocusedField('projectType')}
-                  onBlur={() => setFocusedField(null)}
-                  className="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-colors duration-300 appearance-none cursor-pointer"
-                >
-                  <option value="" className="bg-black">
-                    {contactConfig.projectTypePlaceholder}
-                  </option>
-                  {contactConfig.projectTypeOptions.map((option) => (
-                    <option key={option.value} value={option.value} className="bg-black">
-                      {option.label}
+                <div className="relative">
+                  <select
+                    name="projectType"
+                    value={formData.projectType}
+                    onChange={handleInputChange}
+                    onFocus={() => setFocusedField('projectType')}
+                    onBlur={() => setFocusedField(null)}
+                    className={`w-full bg-white/5 border px-4 py-3 text-white focus:outline-none transition-all duration-300 appearance-none cursor-pointer ${focusedField === 'projectType'
+                      ? 'border-gold bg-white/8'
+                      : 'border-white/15 hover:border-white/30'
+                      } ${!formData.projectType ? 'text-white/25' : ''}`}
+                  >
+                    <option value="" className="bg-black text-white/50">
+                      {contactConfig.projectTypePlaceholder}
                     </option>
-                  ))}
-                </select>
-                <div
-                  className={`absolute bottom-0 left-0 h-px transition-all duration-300 ${focusedField === 'projectType' ? 'w-full bg-gold' : 'w-0 bg-white'
-                    }`}
-                />
+                    {contactConfig.projectTypeOptions.map((option) => (
+                      <option key={option.value} value={option.value} className="bg-black text-white">
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {/* Custom dropdown arrow */}
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                      <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="1.5" className="text-white/40" />
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               {/* Message */}
@@ -309,9 +314,7 @@ export function Contact() {
                 className="relative"
               >
                 <label
-                  className={`absolute left-0 transition-all duration-200 ${focusedField === 'message' || formData.message
-                      ? '-top-6 text-body-sm text-gold'
-                      : 'top-3 text-body text-white/50'
+                  className={`block text-body-sm font-medium mb-2 transition-colors duration-200 ${focusedField === 'message' ? 'text-gold' : 'text-white/50'
                     }`}
                 >
                   {contactConfig.messageLabel}
@@ -323,10 +326,10 @@ export function Contact() {
                   onFocus={() => setFocusedField('message')}
                   onBlur={() => setFocusedField(null)}
                   rows={4}
-                  className="w-full bg-transparent border-b border-white/20 py-3 text-white focus:outline-none focus:border-white transition-colors duration-300 resize-none"
-                />
-                <div
-                  className={`absolute bottom-0 left-0 h-px transition-all duration-300 ${focusedField === 'message' ? 'w-full bg-gold' : 'w-0 bg-white'
+                  placeholder="Describe your vision..."
+                  className={`w-full bg-white/5 border px-4 py-3 text-white placeholder:text-white/25 focus:outline-none transition-all duration-300 resize-none ${focusedField === 'message'
+                    ? 'border-gold bg-white/8'
+                    : 'border-white/15 hover:border-white/30'
                     }`}
                 />
               </div>
@@ -336,7 +339,7 @@ export function Contact() {
             <button
               ref={buttonRef}
               type="submit"
-              className="mt-12 px-10 py-4 bg-gold text-black text-body font-medium flex items-center gap-3 hover:text-black transition-colors duration-300 relative overflow-hidden group"
+              className="mt-10 px-10 py-4 bg-gold text-black text-body font-semibold flex items-center gap-3 transition-all duration-300 relative overflow-hidden group hover:shadow-[0_0_30px_rgba(201,165,90,0.3)]"
             >
               <span className="relative z-10">{contactConfig.submitButtonText}</span>
               <Send className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
@@ -347,7 +350,7 @@ export function Contact() {
           {/* Image side */}
           <div
             ref={imageRef}
-            className="relative aspect-[2/3] lg:aspect-auto overflow-hidden"
+            className="relative aspect-[3/4] lg:aspect-auto overflow-hidden"
             style={{ willChange: 'transform, clip-path' }}
           >
             <img

@@ -1,5 +1,7 @@
 # Photographer Style Template
 
+[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/joecos007/eon?utm_source=oss&utm_medium=github&utm_campaign=joecos007%2Feon&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
+
 A high-end, dark-themed single-page website template with dramatic animations, built for photographers, creative studios, and visual artists. Features GSAP-powered scroll animations, 3D transforms, particle effects, custom cursor, and a noise texture overlay.
 
 ## Features

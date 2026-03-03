@@ -122,7 +122,7 @@ export function Testimonials() {
       className="relative py-32 px-8 lg:px-16 bg-gradient-to-b from-dark-gray to-black overflow-hidden"
       style={{ perspective: '1200px' }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Section title */}
         <h2
           ref={titleRef}
@@ -160,7 +160,7 @@ export function Testimonials() {
                       <Star key={star} className="w-4 h-4 fill-gold text-gold" />
                     ))}
                   </div>
-                  <p className="text-h5 lg:text-h4 font-light text-white/90 leading-relaxed max-w-3xl">
+                  <p className="text-body lg:text-body-lg font-light text-white/80 leading-relaxed max-w-3xl italic">
                     "{testimonial.quote}"
                   </p>
                 </div>

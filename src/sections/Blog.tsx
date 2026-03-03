@@ -14,9 +14,8 @@ export function Blog() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
-  if (!blogConfig.title || blogConfig.posts.length === 0) return null;
-
   useEffect(() => {
+    if (!blogConfig.title || blogConfig.posts.length === 0) return;
     const section = sectionRef.current;
     if (!section) return;
 
@@ -42,12 +41,14 @@ export function Blog() {
         }
 
         // Description fade
-        tl.fromTo(
-          descRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' },
-          0.8
-        );
+        if (descRef.current) {
+          tl.fromTo(
+            descRef.current,
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' },
+            0.8
+          );
+        }
 
         // Posts clip reveal
         postsRef.current.forEach((post, i) => {
@@ -55,35 +56,41 @@ export function Blog() {
             const image = post.querySelector('.post-image');
             const content = post.querySelector('.post-content');
 
-            tl.fromTo(
-              image,
-              {
-                clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)',
-              },
-              {
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                duration: 1,
-                ease: 'expo.out',
-              },
-              1 + i * 0.2
-            );
+            if (image) {
+              tl.fromTo(
+                image,
+                {
+                  clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)',
+                },
+                {
+                  clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+                  duration: 1,
+                  ease: 'expo.out',
+                },
+                1 + i * 0.2
+              );
+            }
 
-            tl.fromTo(
-              content,
-              { y: 30, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' },
-              `-=0.6`
-            );
+            if (content) {
+              tl.fromTo(
+                content,
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out' },
+                `-=0.6`
+              );
+            }
           }
         });
 
         // Button slide in
-        tl.fromTo(
-          buttonRef.current,
-          { x: 50, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' },
-          '-=0.3'
-        );
+        if (buttonRef.current) {
+          tl.fromTo(
+            buttonRef.current,
+            { x: 50, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' },
+            '-=0.3'
+          );
+        }
       },
       once: true,
     });
@@ -95,11 +102,13 @@ export function Blog() {
     };
   }, []);
 
+  if (!blogConfig.title || blogConfig.posts.length === 0) return null;
+
   return (
     <section
       ref={sectionRef}
       id="blog"
-      className="relative py-32 px-8 lg:px-16 bg-black overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -107,7 +116,7 @@ export function Blog() {
           <div>
             <h2
               ref={titleRef}
-              className="text-h1 lg:text-display-xl text-white font-medium mb-4 opacity-0"
+              className="text-h2 md:text-h1 lg:text-display-xl text-white font-medium mb-4 opacity-0"
             >
               {blogConfig.title}
             </h2>
