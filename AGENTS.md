@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Eon is a React 19 + TypeScript single-page website built with Vite. It uses GSAP/Framer Motion for animations, Tailwind CSS for styling, and shadcn/ui (Radix primitives) for UI components. All site content is centralized in `src/config.ts`.
+Lumora is a React 19 + TypeScript single-page website built with Vite. It uses GSAP/Framer Motion for animations, Tailwind CSS for styling, and shadcn/ui (Radix primitives) for UI components. All site content is centralized in `src/config.ts`.
 
 ## Build / Lint / Test Commands
 
@@ -29,7 +29,7 @@ npx eslint src/sections/Hero.tsx
 
 ## Project Structure
 
-```
+```text
 src/
   main.tsx                 # Entry point (React 19 createRoot)
   App.tsx                  # Root component — composes all sections, registers GSAP ScrollTrigger

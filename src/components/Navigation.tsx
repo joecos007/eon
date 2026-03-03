@@ -244,7 +244,7 @@ export function Navigation() {
                 key={item.label}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className={`text-body font-semibold tracking-wide transition-all duration-500 relative group text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] hover:text-white/80`}
+                className={`text-body font-semibold tracking-wide transition-all duration-500 relative group text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-sm px-1`}
               >
                 {item.label}
                 <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300" />
@@ -256,7 +256,7 @@ export function Navigation() {
           <div className="lg:hidden flex items-center pr-2">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`text-white hover:text-gold transition-colors p-3 -m-3 focus:outline-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]`}
+              className={`text-white hover:text-gold transition-colors p-3 -m-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-md drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]`}
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMobileMenuOpen}
             >

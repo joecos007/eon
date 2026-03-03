@@ -205,8 +205,8 @@ export function Hero() {
       />
 
       {/* Scroll down indicator & Diamond */}
-      <div className="absolute left-1/2 bottom-10 z-20 transform -translate-x-1/2 flex flex-col items-center gap-2">
-        <EmbeddedDiamond className="opacity-90 animate-bounce-subtle" />
+      <div className="absolute left-1/2 bottom-10 z-20 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce-subtle">
+        <EmbeddedDiamond className="opacity-90" />
       </div>
 
       {/* Services label — vertical left */}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useId } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'motion/react';
@@ -11,6 +11,9 @@ interface EmbeddedDiamondProps {
 
 export function EmbeddedDiamond({ className = '' }: EmbeddedDiamondProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const id = useId();
+  const gradId = `solid-gold-grad-${id}`;
+  const glowId = `inner-glow-${id}`;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -82,16 +85,18 @@ export function EmbeddedDiamond({ className = '' }: EmbeddedDiamondProps) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full"
+          aria-hidden="true"
+          focusable="false"
         >
           <defs>
-            <linearGradient id="solid-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#f3e5c0" />
               <stop offset="30%" stopColor="#e8d5a3" />
               <stop offset="70%" stopColor="#c9a55a" />
               <stop offset="100%" stopColor="#8a6914" />
             </linearGradient>
             {/* Soft inner glow to give it a 3D gem feel */}
-            <filter id="inner-glow">
+            <filter id={glowId}>
               <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="blur" />
               <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff" />
               <feFlood floodColor="#ffffff" floodOpacity="0.4" />
@@ -103,10 +108,10 @@ export function EmbeddedDiamond({ className = '' }: EmbeddedDiamondProps) {
           {/* Solid Body */}
           <path
             d="M16 28L3 12L8 4H24L29 12L16 28Z"
-            fill="url(#solid-gold-grad)"
-            filter="url(#inner-glow)"
+            fill={`url(#${gradId})`}
+            filter={`url(#${glowId})`}
           />
-          
+
           {/* Facet Lines for Depth (Darker Gold for contrast against the solid fill) */}
           <path
             d="M3 12H29M16 28L10 12M16 28L22 12M10 12L8 4M10 12L16 4M22 12L16 4M22 12L24 4"
@@ -115,7 +120,7 @@ export function EmbeddedDiamond({ className = '' }: EmbeddedDiamondProps) {
             strokeLinejoin="round"
             opacity="0.7"
           />
-          
+
           {/* Top Sparkle (Bright White/Light Gold) */}
           <path
             d="M16 1L16.8 2.5L18.5 2.5L17.2 3.5L17.6 5L16 4L14.4 5L14.8 3.5L13.5 2.5L15.2 2.5L16 1Z"

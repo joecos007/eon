@@ -21,6 +21,7 @@ export function Footer() {
   const copyrightRef = useRef<HTMLDivElement>(null);
   const borderRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const marqueeTweenRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     if (!footerConfig.copyright) return;
@@ -37,8 +38,8 @@ export function Footer() {
         // Infinite Marquee Scroll
         if (marqueeContentRef.current) {
           const contentWidth = marqueeContentRef.current.scrollWidth / 2;
-          
-          gsap.to(marqueeContentRef.current, {
+
+          marqueeTweenRef.current = gsap.to(marqueeContentRef.current, {
             x: -contentWidth,
             duration: 20,
             ease: "none",
@@ -91,6 +92,7 @@ export function Footer() {
     triggersRef.current.push(trigger);
 
     return () => {
+      marqueeTweenRef.current?.kill();
       triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
     };
@@ -117,7 +119,7 @@ export function Footer() {
 
         {/* Marquee content */}
         <div className="flex w-full overflow-hidden">
-          <div 
+          <div
             ref={marqueeContentRef}
             className="flex items-center text-[36px] md:text-[56px] lg:text-[112px] font-medium whitespace-nowrap will-change-transform flex-nowrap w-max"
           >

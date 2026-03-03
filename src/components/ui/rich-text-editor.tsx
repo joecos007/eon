@@ -20,15 +20,19 @@ function ToolbarButton({
     onClick,
     isActive,
     disabled = false,
+    ariaLabel,
     children,
 }: {
     onClick: () => void
     isActive?: boolean
     disabled?: boolean
+    ariaLabel?: string
     children: React.ReactNode
 }) {
     return (
         <button
+            type="button"
+            aria-label={ariaLabel}
             onClick={(e) => {
                 e.preventDefault()
                 onClick()
@@ -72,20 +76,23 @@ function MenuBar() {
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleBold().run()}
                 isActive={activeStates.bold}
+                ariaLabel="Bold"
             >
-                <Bold className="w-4 h-4" />
+                <Bold className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 isActive={activeStates.italic}
+                ariaLabel="Italic"
             >
-                <Italic className="w-4 h-4" />
+                <Italic className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleStrike().run()}
                 isActive={activeStates.strike}
+                ariaLabel="Strike"
             >
-                <Strikethrough className="w-4 h-4" />
+                <Strikethrough className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
 
             <div className="w-px h-5 bg-white/10 mx-1" />
@@ -93,20 +100,23 @@ function MenuBar() {
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
                 isActive={activeStates.heading1}
+                ariaLabel="Heading 1"
             >
-                <Heading1 className="w-4 h-4" />
+                <Heading1 className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                 isActive={activeStates.heading2}
+                ariaLabel="Heading 2"
             >
-                <Heading2 className="w-4 h-4" />
+                <Heading2 className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
                 isActive={activeStates.heading3}
+                ariaLabel="Heading 3"
             >
-                <Heading3 className="w-4 h-4" />
+                <Heading3 className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
 
             <div className="w-px h-5 bg-white/10 mx-1" />
@@ -114,20 +124,23 @@ function MenuBar() {
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 isActive={activeStates.bulletList}
+                ariaLabel="Bullet List"
             >
-                <List className="w-4 h-4" />
+                <List className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
                 isActive={activeStates.orderedList}
+                ariaLabel="Ordered List"
             >
-                <ListOrdered className="w-4 h-4" />
+                <ListOrdered className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().toggleBlockquote().run()}
                 isActive={activeStates.blockquote}
+                ariaLabel="Block quote"
             >
-                <Quote className="w-4 h-4" />
+                <Quote className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
 
             <div className="flex-1" />
@@ -135,14 +148,16 @@ function MenuBar() {
             <ToolbarButton
                 onClick={() => editor.chain().focus().undo().run()}
                 disabled={!editor.can().chain().focus().undo().run()}
+                ariaLabel="Undo"
             >
-                <Undo className="w-4 h-4" />
+                <Undo className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
             <ToolbarButton
                 onClick={() => editor.chain().focus().redo().run()}
                 disabled={!editor.can().chain().focus().redo().run()}
+                ariaLabel="Redo"
             >
-                <Redo className="w-4 h-4" />
+                <Redo className="w-4 h-4" aria-hidden="true" />
             </ToolbarButton>
         </div>
     )
