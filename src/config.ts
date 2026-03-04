@@ -71,8 +71,6 @@ export interface AboutConfig {
   description: string;
   image1: string;
   image1Alt: string;
-  image2: string;
-  image2Alt: string;
   authorImage: string;
   authorName: string;
   authorBio: string;
@@ -84,8 +82,6 @@ export const aboutConfig: AboutConfig = {
   description: "Lumora began as a whisper between two friends. Reena Koirala's years in healthcare taught her to see beauty in the smallest, most vital details, while Priya Laishangbam collected wonder from every sky she traveled beneath. They did not set out to create jewelry. They set out to find it. They searched the quiet workshops, the storied ateliers, and the hidden hands of master artisans across the globe, bringing back only what made them catch their breath. Every piece in our collection has been handpicked with a single question: does it make the one who wears it feel like the most luminous person in the room? We have done the searching. You simply select, and glow.",
   image1: "/images/our-story-image.png",
   image1Alt: "A glimpse into the curated world of Lumora jewelry",
-  image2: "/ghibli-bg-2.png",
-  image2Alt: "Radiant Lumora jewelry adorning elegant hands",
   authorImage: "/founders-ghibli.png",
   authorName: "Reena Koirala & Priya Laishangbam",
   authorBio: "Two friends, two journeys, one devotion: to find the most exquisite adornments the world has to offer, so all you have to do is choose the light that speaks to you.",
@@ -106,12 +102,14 @@ export interface WorkItem {
 export interface WorksConfig {
   title: string;
   subtitle: string;
+  closeProjectLabel: string;
   projects: WorkItem[];
 }
 
 export const worksConfig: WorksConfig = {
   title: "Collections",
   subtitle: "Handpicked from the world\u2019s finest artisans, each piece waiting to become part of your story.",
+  closeProjectLabel: "Close project details",
   projects: [
     {
       id: 1,
@@ -237,78 +235,6 @@ export const testimonialsConfig: TestimonialsConfig = {
 };
 
 // ============================================================================
-// Pricing Section Configuration
-// ============================================================================
-
-export interface PricingPlan {
-  id: number;
-  name: string;
-  price: number;
-  unit: string;
-  featured: boolean;
-  features: string[];
-}
-
-export interface PricingConfig {
-  title: string;
-  subtitle: string;
-  ctaButtonText: string;
-  plans: PricingPlan[];
-}
-
-export const pricingConfig: PricingConfig = {
-  title: "Investment",
-  subtitle: "Thoughtfully curated collections for every chapter of your journey.",
-  ctaButtonText: "Explore Collection",
-  plans: [
-    {
-      id: 1,
-      name: "Essence",
-      price: 280,
-      unit: "starting",
-      featured: false,
-      features: [
-        "Delicate everyday adornments",
-        "Sterling silver with gold vermeil",
-        "Hand-selected freshwater pearls",
-        "Gift packaging included",
-        "Complimentary resizing"
-      ]
-    },
-    {
-      id: 2,
-      name: "Luminary",
-      price: 680,
-      unit: "starting",
-      featured: true,
-      features: [
-        "Signature curated pieces",
-        "Solid 14k gold selections",
-        "Premium gemstones & pearls",
-        "Personal styling session",
-        "Lifetime care & maintenance",
-        "Private viewing included"
-      ]
-    },
-    {
-      id: 3,
-      name: "Eternity",
-      price: 1800,
-      unit: "starting",
-      featured: false,
-      features: [
-        "Rare & heirloom-quality finds",
-        "18k gold & platinum pieces",
-        "One-of-a-kind artisan selections",
-        "Dedicated concierge service",
-        "Certificate of authenticity",
-        "Annual complimentary care"
-      ]
-    },
-  ],
-};
-
-// ============================================================================
 // FAQ Section Configuration
 // ============================================================================
 
@@ -369,6 +295,7 @@ export interface BlogConfig {
   allPostsLabel: string;
   readMoreLabel: string;
   readTimePrefix: string;
+  closeArticleLabel: string;
   posts: BlogPost[];
 }
 
@@ -378,6 +305,7 @@ export const blogConfig: BlogConfig = {
   allPostsLabel: "All Letters",
   readMoreLabel: "Read More",
   readTimePrefix: "Read ",
+  closeArticleLabel: "Close article",
   posts: [
     {
       id: 1,

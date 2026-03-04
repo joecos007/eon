@@ -16,6 +16,10 @@ export function Contact() {
   const inputsRef = useRef<(HTMLDivElement | null)[]>([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const isTouchDevice = typeof window !== 'undefined'
+    && (window.innerWidth < 768 || window.matchMedia('(hover: none)').matches);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -117,27 +121,29 @@ export function Contact() {
     });
     triggersRef.current.push(trigger);
 
-    // Image parallax
-    const parallaxTrigger = ScrollTrigger.create({
-      trigger: section,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 1,
-      onUpdate: (self) => {
-        if (imageRef.current) {
-          gsap.set(imageRef.current, {
-            y: -30 + self.progress * 60,
-          });
-        }
-      },
-    });
-    triggersRef.current.push(parallaxTrigger);
+    // Image parallax — skip on mobile/reduced-motion to prevent jank
+    if (!isTouchDevice && !prefersReducedMotion) {
+      const parallaxTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: (self) => {
+          if (imageRef.current) {
+            gsap.set(imageRef.current, {
+              y: -30 + self.progress * 60,
+            });
+          }
+        },
+      });
+      triggersRef.current.push(parallaxTrigger);
+    }
 
     return () => {
-      triggersRef.current.forEach((t) => t.kill());
+      triggersRef.current.forEach((t) => { t.kill(); });
       triggersRef.current = [];
     };
-  }, []);
+  }, [isTouchDevice, prefersReducedMotion]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -344,7 +350,7 @@ export function Contact() {
             >
               <span className="relative z-10">{contactConfig.submitButtonText}</span>
               <Send className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
-              <div className="absolute inset-0 bg-gold-light transform -translate-x-full group-hover:translate-x-0 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+              <div className="absolute inset-0 bg-gold-light transform -translate-x-full group-hover:translate-x-0 transition-transform duration-400" style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }} />
             </button>
           </form>
 

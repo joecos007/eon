@@ -13,7 +13,14 @@ Lumora is a React 19 + TypeScript single-page website built with Vite. It uses G
 | `npm run lint`    | Run ESLint on the entire project          |
 | `npm run preview` | Preview the production build locally      |
 
-**No test framework is configured.** There are no test files, no test runner (Jest, Vitest, Playwright, etc.), and no test-related npm scripts. If you add tests, Vitest is the natural choice given the Vite toolchain.
+**Playwright E2E tests are configured.** Tests live in `tests/e2e/` and are configured via `playwright.config.ts`.
+
+| Command             | What it does                                      |
+| ------------------- | ------------------------------------------------- |
+| `npm run test:e2e`  | Run the full Playwright E2E suite                 |
+| `npx playwright install` | Install Playwright browsers (first-time setup) |
+
+The dev server starts automatically when tests run (configured in `playwright.config.ts`). To run locally: `npm run test:e2e`. In CI, set `CI=true` so `forbidOnly` and retries are enabled.
 
 ### Type-checking only
 

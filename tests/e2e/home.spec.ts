@@ -21,8 +21,11 @@ test.describe('Lumora - Full E2E Suite', () => {
   test('no console errors on load', async ({ page }) => {
     const errors: string[] = [];
     page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
     await page.goto('/');
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState('networkidle');
     // Filter out known benign warnings
     const critical = errors.filter(
       (e) => !e.includes('ResizeObserver') && !e.includes('passive')
@@ -109,7 +112,7 @@ test.describe('Lumora - Full E2E Suite', () => {
     await expect(page.getByText('so your radiance never has to wait.')).toBeVisible();
 
     // Author image
-    const authorImg = page.locator('#about img[alt="Reena & Priya"]');
+    const authorImg = page.locator('#about img[alt="Reena Koirala & Priya Laishangbam"]');
     await expect(authorImg).toBeAttached();
     await expect(authorImg).toHaveAttribute('loading', 'lazy');
   });
@@ -184,7 +187,7 @@ test.describe('Lumora - Full E2E Suite', () => {
 
     // Click first service item
     const firstItem = services.locator('.service-item').first();
-    await firstItem.locator('div[class*="cursor-pointer"]').first().click();
+    await firstItem.locator('button[class*="cursor-pointer"]').first().click();
     await page.waitForTimeout(600);
 
     // Description text should now be visible
@@ -328,7 +331,7 @@ test.describe('Lumora - Full E2E Suite', () => {
     await expect(page.getByText('2026 Lumora. All rights reserved.')).toBeVisible();
 
     // Developer credit
-    await expect(page.getByText('Fueled by Caffeine & Code. Crafted by Oliver.')).toBeVisible();
+    await expect(page.getByText('Fueled by Caffeine & Code. Crafted by Oliver Oinam.')).toBeVisible();
 
     // CTA link
     await expect(page.getByText('Begin Your Journey')).toBeVisible();
@@ -431,6 +434,12 @@ test.describe('Lumora - Full E2E Suite', () => {
       const grid = works.locator('.grid.grid-cols-1');
       await expect(grid).toBeAttached();
     });
+
+    test('mobile menu button has accessible label', async ({ page }) => {
+      await page.goto('/');
+      const menuBtn = page.locator('nav button[aria-label]');
+      await expect(menuBtn).toHaveAttribute('aria-label', /menu/i);
+    });
   });
 
   // =========================================================================
@@ -463,12 +472,27 @@ test.describe('Lumora - Full E2E Suite', () => {
     await expect(focused).toBeAttached();
   });
 
-  test('mobile menu button has accessible label', async ({ page, isMobile }) => {
-    if (!isMobile) {
-      test.skip();
-      return;
-    }
-    const menuBtn = page.locator('nav button[aria-label]');
-    await expect(menuBtn).toHaveAttribute('aria-label', /menu/i);
+  test('modals have dialog semantics', async ({ page }) => {
+    const works = page.locator('#works');
+    await works.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1500);
+
+    // Click first card to open modal
+    const firstCard = works.locator('[role="button"]').first();
+    await firstCard.click();
+    await page.waitForTimeout(500);
+
+    // Verify dialog semantics
+    const modal = page.locator('[role="dialog"]');
+    await expect(modal).toBeVisible();
+    await expect(modal).toHaveAttribute('aria-modal', 'true');
+
+    // Close button should have aria-label
+    const closeBtn = modal.locator('button[aria-label]').first();
+    await expect(closeBtn).toBeVisible();
+
+    await closeBtn.click();
+    await page.waitForTimeout(500);
+    await expect(modal).not.toBeVisible();
   });
 });

@@ -22,12 +22,32 @@ export function Footer() {
   const borderRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
   const marqueeTweenRef = useRef<gsap.core.Tween | null>(null);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (!footerConfig.copyright) return;
 
     const section = sectionRef.current;
     if (!section) return;
+
+    const startMarquee = () => {
+      if (!marqueeContentRef.current || prefersReducedMotion) return;
+      marqueeTweenRef.current?.kill();
+      const contentWidth = marqueeContentRef.current.scrollWidth / 2;
+      marqueeTweenRef.current = gsap.to(marqueeContentRef.current, {
+        x: -contentWidth,
+        duration: 20,
+        ease: 'none',
+        repeat: -1,
+      });
+    };
+
+    let resizeTimer: number;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(startMarquee, 200);
+    };
 
     const trigger = ScrollTrigger.create({
       trigger: section,
@@ -36,16 +56,7 @@ export function Footer() {
         const tl = gsap.timeline();
 
         // Infinite Marquee Scroll
-        if (marqueeContentRef.current) {
-          const contentWidth = marqueeContentRef.current.scrollWidth / 2;
-
-          marqueeTweenRef.current = gsap.to(marqueeContentRef.current, {
-            x: -contentWidth,
-            duration: 20,
-            ease: "none",
-            repeat: -1,
-          });
-        }
+        startMarquee();
 
         // Top border draw
         tl.fromTo(
@@ -86,17 +97,21 @@ export function Footer() {
           { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' },
           '-=0.2'
         );
+
+        window.addEventListener('resize', handleResize, { passive: true });
       },
       once: true,
     });
     triggersRef.current.push(trigger);
 
     return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', handleResize);
       marqueeTweenRef.current?.kill();
-      triggersRef.current.forEach((t) => t.kill());
+      triggersRef.current.forEach((t) => { t.kill(); });
       triggersRef.current = [];
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   if (!footerConfig.copyright) return null;
 
@@ -216,7 +231,7 @@ export function Footer() {
               className="inline-flex items-center gap-3 text-h5 lg:text-h4 text-white font-medium group hover:text-gold transition-colors duration-300"
             >
               {footerConfig.ctaText}
-              <span className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:border-gold group-hover:shadow-[0_0_15px_var(--gold)] transition-all duration-300">
+              <span className="w-10 h-10 rounded-none border border-white/30 flex items-center justify-center group-hover:border-gold group-hover:shadow-[0_0_15px_var(--gold)] transition-all duration-300">
                 <ArrowUpRight className="w-5 h-5 group-hover:text-gold" />
               </span>
             </a>

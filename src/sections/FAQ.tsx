@@ -49,7 +49,7 @@ export function FAQ() {
     triggersRef.current.push(trigger);
 
     return () => {
-      triggersRef.current.forEach((t) => t.kill());
+      triggersRef.current.forEach((t) => { t.kill(); });
       triggersRef.current = [];
     };
   }, []);
@@ -102,7 +102,7 @@ export function FAQ() {
 
                 {/* Plus/Minus Icon */}
                 <div
-                  className={`w-12 h-12 rounded-full border flex-shrink-0 flex items-center justify-center transition-all duration-300 ${openIndex === index
+                  className={`w-12 h-12 rounded-none border flex-shrink-0 flex items-center justify-center transition-all duration-300 ${openIndex === index
                     ? 'bg-gold border-gold text-black rotate-45'
                     : 'border-white/20 text-white group-hover:border-gold/50'
                     }`}
@@ -113,10 +113,11 @@ export function FAQ() {
 
               {/* Answer */}
               <div
-                className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${openIndex === index
+                className={`overflow-hidden transition-all duration-500 motion-reduce:transition-none ${openIndex === index
                   ? 'max-h-[500px] opacity-100'
                   : 'max-h-0 opacity-0'
                   }`}
+                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
                 <div className="pb-8 pr-12 md:pr-24 text-body-lg text-white/70 font-light leading-relaxed border-l-2 border-gold/40 pl-6 ml-6 md:ml-12">
                   {faq.answer}

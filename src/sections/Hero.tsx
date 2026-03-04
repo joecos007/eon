@@ -19,6 +19,10 @@ export function Hero() {
   const buttonBoundsRef = useRef<DOMRect | null>(null);
   const [, setLoaded] = useState(false);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const isTouchDevice = typeof window !== 'undefined'
+    && (window.innerWidth < 768 || window.matchMedia('(hover: none)').matches);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (!heroConfig.title) return;
@@ -82,52 +86,53 @@ export function Hero() {
 
     requestAnimationFrame(() => setLoaded(true));
 
-    // Scroll effects — parallax on the background image
-    const trigger1 = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top top',
-      end: '50% top',
-      scrub: 1,
-      onUpdate: (self) => {
-        if (imageRef.current) {
-          gsap.set(imageRef.current, {
-            y: `${self.progress * 45}%`,
-            opacity: 1 - self.progress * 0.65,
-          });
-        }
-      },
-    });
-    triggersRef.current.push(trigger1);
+    // Scroll effects — skip parallax scrub on mobile/reduced-motion
+    if (!isTouchDevice && !prefersReducedMotion) {
+      const trigger1 = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '50% top',
+        scrub: 1,
+        onUpdate: (self) => {
+          if (imageRef.current) {
+            gsap.set(imageRef.current, {
+              y: `${self.progress * 45}%`,
+              opacity: 1 - self.progress * 0.65,
+            });
+          }
+        },
+      });
+      triggersRef.current.push(trigger1);
 
-    // Scroll effect — title fades out
-    const trigger2 = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: '10% top',
-      end: '40% top',
-      scrub: 1,
-      onUpdate: (self) => {
-        if (titleRef.current) {
-          gsap.set(titleRef.current, {
-            opacity: 1 - self.progress,
-            y: -30 * self.progress,
-          });
-        }
-        if (subtitleRef.current) {
-          gsap.set(subtitleRef.current, {
-            opacity: 1 - self.progress,
-            y: -20 * self.progress,
-          });
-        }
-      },
-    });
-    triggersRef.current.push(trigger2);
+      const trigger2 = ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: '10% top',
+        end: '40% top',
+        scrub: 1,
+        onUpdate: (self) => {
+          if (titleRef.current) {
+            gsap.set(titleRef.current, {
+              opacity: 1 - self.progress,
+              y: -30 * self.progress,
+            });
+          }
+          if (subtitleRef.current) {
+            gsap.set(subtitleRef.current, {
+              opacity: 1 - self.progress,
+              y: -20 * self.progress,
+            });
+          }
+        },
+      });
+      triggersRef.current.push(trigger2);
+    }
 
     return () => {
       tl.kill();
-      triggersRef.current.forEach((t) => t.kill());
+      triggersRef.current.forEach((t) => { t.kill(); });
       triggersRef.current = [];
     };
-  }, []);
+  }, [isTouchDevice, prefersReducedMotion]);
 
   const handleButtonMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!buttonRef.current) return;
@@ -144,7 +149,8 @@ export function Hero() {
       x: x * 15,
       y: y * 15,
       duration: 0.3,
-      ease: "power2.out"
+      ease: 'power2.out',
+      overwrite: true
     });
   };
 
@@ -154,7 +160,7 @@ export function Hero() {
       x: 0,
       y: 0,
       duration: 0.7,
-      ease: "elastic.out(1, 0.3)"
+      ease: 'elastic.out(1, 0.3)'
     });
   };
 
@@ -201,7 +207,7 @@ export function Hero() {
       <div className="absolute top-24 pt-safe left-1/2 -translate-x-1/2 z-20 w-max max-w-[90vw]">
         <div
           ref={badgeRef}
-          className="px-5 md:px-6 py-2 rounded border border-white/20 bg-black/20 backdrop-blur-md"
+          className="px-5 md:px-6 py-2 rounded-none border border-white/20 bg-black/20 backdrop-blur-md"
         >
           <span className="text-body-sm font-medium tracking-[0.1em] md:tracking-[0.2em] uppercase shimmer-text text-center block">
             {heroConfig.badge}
@@ -224,7 +230,7 @@ export function Hero() {
 
         <p
         ref={subtitleRef}
-        className="text-body md:text-body-lg lg:text-h5 font-light text-white/90 tracking-[0.1em] lg:tracking-[0.15em] uppercase bg-black/40 lg:bg-black/25 backdrop-blur-md px-4 py-2 lg:px-5 lg:py-1.5 rounded inline-block"
+        className="text-body md:text-body-lg lg:text-h5 font-light text-white/90 tracking-[0.1em] lg:tracking-[0.15em] uppercase bg-black/40 lg:bg-black/25 backdrop-blur-md px-4 py-2 lg:px-5 lg:py-1.5 rounded-none inline-block"
       >
           {heroConfig.subtitle}
         </p>
@@ -236,7 +242,7 @@ export function Hero() {
             onMouseMove={handleButtonMouseMove}
             onMouseLeave={handleButtonMouseLeave}
             onClick={(e) => handleScrollClick(e, '#works')}
-            className="inline-block px-8 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-gold/90 hover:border-gold hover:text-black hover:font-semibold transition-all duration-300 font-medium tracking-[0.15em] uppercase rounded-sm cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.3)]"
+            className="inline-block px-8 py-3 bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-gold/90 hover:border-gold hover:text-black hover:font-semibold transition-all duration-300 font-medium tracking-[0.15em] uppercase rounded-none cursor-pointer shadow-[0_0_20px_rgba(0,0,0,0.3)]"
           >
             Explore Collection
           </a>

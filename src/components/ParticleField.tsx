@@ -160,12 +160,12 @@ export function ParticleField() {
         const colorBase = p.isGold ? '201, 165, 90' : '255, 255, 255';
         ctx.fillStyle = `rgba(${colorBase}, ${finalOpacity})`;
 
-        // Only add shadow blur (glow) to highly visible particles for performance
-        if (finalSize > 1.5 || interactionOpacity > 0.2) {
+        // Shadow blur (glow) — disabled on mobile for GPU performance
+        if (!isTouchDevice && (finalSize > 1.5 || interactionOpacity > 0.2)) {
           ctx.shadowBlur = finalSize * 3;
           ctx.shadowColor = `rgba(${colorBase}, ${finalOpacity})`;
         } else {
-          ctx.shadowBlur = 0; // Reset
+          ctx.shadowBlur = 0;
         }
 
         ctx.fill();
