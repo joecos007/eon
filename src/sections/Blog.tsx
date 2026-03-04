@@ -19,6 +19,8 @@ export function Blog() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const timeoutIdsRef = useRef<number[]>([]);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (!blogConfig.title || blogConfig.posts.length === 0) return;
@@ -269,10 +271,10 @@ export function Blog() {
       <AnimatePresence>
         {expandedId !== null && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={prefersReducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2, ease: 'easeOut' }}
             className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4 md:p-8 lg:p-16 overflow-y-auto"
             onClick={() => setExpandedId(null)}
             role="dialog"
@@ -284,10 +286,10 @@ export function Blog() {
               if (!post) return null;
               return (
                 <motion.div
-                  initial={{ y: 30, opacity: 0 }}
+                  initial={prefersReducedMotion ? false : { y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 20, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: 'easeOut', delay: 0.15 }}
+                  exit={prefersReducedMotion ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.3, ease: 'easeOut', delay: 0.15 }}
                   onClick={(e) => e.stopPropagation()}
                   className="relative w-full max-w-4xl bg-[#0a0806] border border-gold/10 rounded-2xl overflow-hidden shadow-2xl mx-auto my-auto"
                 >
@@ -337,7 +339,7 @@ export function Blog() {
                         onClick={() => setExpandedId(null)}
                         className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white tracking-widest rounded-sm border border-white/10 transition-[background-color] uppercase text-sm"
                       >
-                        Close
+                        {blogConfig.closeArticleLabel}
                       </button>
                     </div>
                   </div>

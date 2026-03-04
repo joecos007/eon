@@ -50,28 +50,28 @@ export function Testimonials() {
               `-=${0.8 - i * 0.2}`
             );
 
-            // Avatar pop
+            // Avatar pop — skip elastic on reduced-motion
             const avatar = card.querySelector('.avatar');
             if (avatar) {
               tl.fromTo(
                 avatar,
                 { scale: 0 },
-                {
-                  scale: 1,
-                  duration: 0.5,
-                  ease: 'elastic.out(1, 0.5)',
-                },
+                prefersReducedMotion
+                  ? { scale: 1, duration: 0.01 }
+                  : { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' },
                 '-=0.7'
               );
             }
 
-            // Quote mark fade
+            // Quote mark fade — instant on reduced-motion
             const quoteMark = card.querySelector('.quote-mark');
             if (quoteMark) {
               tl.fromTo(
                 quoteMark,
                 { scale: 0.5, opacity: 0 },
-                { scale: 1, opacity: 0.3, duration: 0.4, ease: 'power2.out' },
+                prefersReducedMotion
+                  ? { scale: 1, opacity: 0.3, duration: 0.01 }
+                  : { scale: 1, opacity: 0.3, duration: 0.4, ease: 'power2.out' },
                 '-=0.4'
               );
             }

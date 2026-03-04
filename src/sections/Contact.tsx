@@ -18,6 +18,8 @@ export function Contact() {
   const triggersRef = useRef<ScrollTrigger[]>([]);
   const isTouchDevice = typeof window !== 'undefined'
     && (window.innerWidth < 768 || window.matchMedia('(hover: none)').matches);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -119,8 +121,8 @@ export function Contact() {
     });
     triggersRef.current.push(trigger);
 
-    // Image parallax — skip on mobile to prevent jank
-    if (!isTouchDevice) {
+    // Image parallax — skip on mobile/reduced-motion to prevent jank
+    if (!isTouchDevice && !prefersReducedMotion) {
       const parallaxTrigger = ScrollTrigger.create({
         trigger: section,
         start: 'top bottom',
@@ -141,7 +143,7 @@ export function Contact() {
       triggersRef.current.forEach((t) => { t.kill(); });
       triggersRef.current = [];
     };
-  }, [isTouchDevice]);
+  }, [isTouchDevice, prefersReducedMotion]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
