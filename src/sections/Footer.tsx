@@ -226,20 +226,20 @@ export function Footer() {
         {/* Copyright */}
         <div
           ref={copyrightRef}
-          className="mt-20 pt-8 border-t border-white/10 flex flex-col items-center gap-6"
+          className="mt-20 pt-8 border-t border-white/20 flex flex-col items-center gap-6"
         >
           <EmbeddedDiamond className="w-8 h-8 opacity-80" />
           <div className="flex flex-col lg:flex-row w-full justify-between items-center gap-4">
-            <p className="text-body-sm text-white/40">
+            <p className="text-body-sm text-white/70">
               {footerConfig.copyright}
             </p>
-            <p className="text-body-sm text-white/30">
+            <p className="text-body-sm text-white/60">
               {footerConfig.tagline}
             </p>
           </div>
         </div>
         <div className="mt-4 text-center">
-          <p className="text-body-sm text-white/25 tracking-wide">
+          <p className="text-body-sm text-white/80 hover:text-gold transition-colors duration-300 tracking-wide font-medium">
             {footerConfig.developerCredit}
           </p>
         </div>

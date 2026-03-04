@@ -81,13 +81,13 @@ export interface AboutConfig {
 export const aboutConfig: AboutConfig = {
   titleLine1: "We wandered the world,",
   titleLine2: "so your radiance never has to wait.",
-  description: "Lumora began as a whisper between two friends. Reena's years in healthcare taught her to see beauty in the smallest, most vital details, while Priya collected wonder from every sky she traveled beneath. They did not set out to create jewelry. They set out to find it. They searched the quiet workshops, the storied ateliers, and the hidden hands of master artisans across the globe, bringing back only what made them catch their breath. Every piece in our collection has been handpicked with a single question: does it make the one who wears it feel like the most luminous person in the room? We have done the searching. You simply select, and glow.",
+  description: "Lumora began as a whisper between two friends. Reena Koirala's years in healthcare taught her to see beauty in the smallest, most vital details, while Priya Laishangbam collected wonder from every sky she traveled beneath. They did not set out to create jewelry. They set out to find it. They searched the quiet workshops, the storied ateliers, and the hidden hands of master artisans across the globe, bringing back only what made them catch their breath. Every piece in our collection has been handpicked with a single question: does it make the one who wears it feel like the most luminous person in the room? We have done the searching. You simply select, and glow.",
   image1: "/images/our-story-image.png",
   image1Alt: "A glimpse into the curated world of Lumora jewelry",
   image2: "/ghibli-bg-2.png",
   image2Alt: "Radiant Lumora jewelry adorning elegant hands",
   authorImage: "/founders-ghibli.png",
-  authorName: "Reena & Priya",
+  authorName: "Reena Koirala & Priya Laishangbam",
   authorBio: "Two friends, two journeys, one devotion: to find the most exquisite adornments the world has to offer, so all you have to do is choose the light that speaks to you.",
 };
 
@@ -490,5 +490,5 @@ export const footerConfig: FooterConfig = {
   ctaHref: "#contact",
   copyright: "\u00a9 2026 Lumora. All rights reserved.",
   tagline: "Curated with devotion, worn with radiance.",
-  developerCredit: "Fueled by Caffeine & Code. Crafted by Oliver.",
+  developerCredit: "Fueled by Caffeine & Code. Crafted by Oliver Oinam.",
 };
