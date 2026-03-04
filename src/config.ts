@@ -82,7 +82,7 @@ export const aboutConfig: AboutConfig = {
   titleLine1: "We wandered the world,",
   titleLine2: "so your radiance never has to wait.",
   description: "Lumora began as a whisper between two friends. Reena's years in healthcare taught her to see beauty in the smallest, most vital details, while Priya collected wonder from every sky she traveled beneath. They did not set out to create jewelry. They set out to find it. They searched the quiet workshops, the storied ateliers, and the hidden hands of master artisans across the globe, bringing back only what made them catch their breath. Every piece in our collection has been handpicked with a single question: does it make the one who wears it feel like the most luminous person in the room? We have done the searching. You simply select, and glow.",
-  image1: "/ghibli-bg-1.png",
+  image1: "/images/our-story-image.png",
   image1Alt: "A glimpse into the curated world of Lumora jewelry",
   image2: "/ghibli-bg-2.png",
   image2Alt: "Radiant Lumora jewelry adorning elegant hands",
@@ -100,6 +100,7 @@ export interface WorkItem {
   title: string;
   category: string;
   image: string;
+  description: string;
 }
 
 export interface WorksConfig {
@@ -116,25 +117,29 @@ export const worksConfig: WorksConfig = {
       id: 1,
       title: "Lumina Drops",
       category: "Pearl Collection",
-      image: "/work-1.jpg"
+      image: "/collections_lumina_drops_1772579918165.png",
+      description: "Ethereal pearl earrings holding the light of dawn. Meticulously sourced for their unmatched luster and perfect spherical form."
     },
     {
       id: 2,
       title: "Jade Whisper",
       category: "Heritage Line",
-      image: "/work-2.jpg"
+      image: "/collections_jade_whisper_1772579991966.png",
+      description: "A translucent green jade masterpiece that carries the quiet wisdom of ancient forests and generational craftsmanship."
     },
     {
       id: 3,
       title: "Golden Hour",
       category: "Stackables",
-      image: "/work-3.jpg"
+      image: "/collections_golden_hour_1772580005861.png",
+      description: "Delicate, sparkling gold rings meant to be stacked, capturing the warm, fleeting magic of the setting sun."
     },
     {
       id: 4,
       title: "Eternity Band",
       category: "Bridal",
-      image: "/work-4.jpg"
+      image: "/collections_eternity_band_1772580032724.png",
+      description: "A breathtaking endless circle of diamonds, catching moonlight to symbolize devotion that outlasts time itself."
     },
   ],
 };
@@ -170,7 +175,7 @@ export const servicesConfig: ServicesConfig = {
       id: "02",
       title: "Personal Styling",
       description: "A private consultation to understand your light, your story, and your occasion, matching you with the piece that was always meant to find you.",
-      image: "/service-2.jpg"
+      image: "/services_styling_1772580048117.png"
     },
     {
       id: "03",
@@ -351,6 +356,7 @@ export interface BlogPost {
   id: number;
   title: string;
   excerpt: string;
+  content: string[];
   readTime: string;
   date: string;
   image: string;
@@ -377,6 +383,11 @@ export const blogConfig: BlogConfig = {
       id: 1,
       title: "From Sky to Selection: Our Journey",
       excerpt: "How two friends from different worlds, healthcare and aviation, discovered a shared devotion to finding beauty that moves you. The story of Lumora is the story of learning to see light everywhere.",
+      content: [
+        "It started not in a jewelry store, but in the sterile, quiet halls of a hospital, and the expansive, lonely skies above the Atlantic. Reena, moving through her days in healthcare, learned quickly that life’s most profound moments are often entirely quiet. A squeezed hand. A steady heartbeat. A shared breath. She found herself noticing the small, constant things people held onto—often a worn gold band or a delicate pendant—objects that served as anchors of a life well-lived.",
+        "Meanwhile, Priya was crossing time zones. As an air hostess, she inhabited the spaces in between places. Her life was defined by motion, by the transient nature of encounters. But in every city she visited—from the sun-drenched markets of Marrakech to the hidden, centuries-old gold districts of Florence—she sought out the permanent. She collected pieces of adornment not just for their beauty, but for their stillness. For the way a well-crafted piece of jewelry exists outside of time.",
+        "When our paths finally crossed on solid ground, we realized we were looking for the same thing: light. The kind of light that doesn't just sit on the skin, but answers the person wearing it. And so, Lumora was born. We stopped merely looking at adornments, and started searching for them. This journal is a record of that search."
+      ],
       readTime: "6 min",
       date: "Feb 28, 2024",
       image: "/blog-1.jpg",
@@ -386,6 +397,11 @@ export const blogConfig: BlogConfig = {
       id: 2,
       title: "The Language of Pearls",
       excerpt: "Pearls have been treasured for millennia, each one a quiet miracle of the sea. Discover how we seek, select, and pair these ocean-born gems into pieces that whisper elegance.",
+      content: [
+        "When we think of pearls, we often think of them as finished objects, smooth and perfect, resting against collarbones or wrists. But to understand a pearl is to understand its origin: a defense mechanism. It is the only gem created by a living organism, a continuous, slow layering of nacre to soothe an irritation. In this way, every pearl is a testament to resilience.",
+        "When we source our pearls—whether they are the luminous white South Sea varieties or the deeply bruised, iridescent peacock tones from Tahiti—we are looking for character over flawless uniformity. We look for luster, yes, but we also look for life. A slightly baroque shape or a subtle dimple isn't a flaw; it is the signature of the water that made it.",
+        "Pairing these gems requires absolute patience. Stringing a necklace of matched pearls can take months of sorting, holding each sphere against the light to ensure its complexion matches its neighbor. But when they are finally brought together, they create a soft, unmistakable glow. They don't shout like diamonds; they whisper. And for those who choose them, that whisper is more than enough."
+      ],
       readTime: "4 min",
       date: "Feb 15, 2024",
       image: "/blog-2.jpg",

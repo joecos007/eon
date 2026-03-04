@@ -189,8 +189,7 @@ export function ParticleField() {
   return (
     <canvas
       ref={canvasRef}
-      // Reverted to z-10 so it floats securely above the dark noise background
-      className="fixed inset-0 pointer-events-none z-10"
+      className="fixed inset-0 pointer-events-none z-[1]"
       style={{ mixBlendMode: 'screen' }}
     />
   );

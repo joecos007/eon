@@ -154,7 +154,6 @@ export function Footer() {
       <div
         ref={borderRef}
         className="h-px bg-gold/20 mb-16"
-        style={{ willChange: 'width' }}
       />
 
       {/* Footer content */}

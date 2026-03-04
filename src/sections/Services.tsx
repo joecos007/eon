@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion, AnimatePresence } from 'motion/react';
+import { Plus, Minus } from 'lucide-react';
 import { servicesConfig } from '../config';
 import { EmbeddedDiamond } from '../components/EmbeddedDiamond';
 
@@ -11,16 +13,8 @@ export function Services() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const imagePreviewRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const isTouchDevice = (() => {
-    if (typeof window !== 'undefined') {
-      return window.matchMedia('(hover: none)').matches;
-    }
-    return false;
-  })();
-  const mousePos = useRef({ x: 0, y: 0 });
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
 
   useEffect(() => {
@@ -103,76 +97,19 @@ export function Services() {
 
   if (!servicesConfig.title || servicesConfig.services.length === 0) return null;
 
-  // Custom cursor follow for image preview
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (isTouchDevice) return;
-    if (!imagePreviewRef.current) return;
-    const section = sectionRef.current;
-    if (!section || !imageRef.current) return;
-
-    const rect = section.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    mousePos.current = { x, y };
-
-    gsap.to(imageRef.current, {
-      x: x - 150,
-      y: y - 200,
-      duration: 0.15,
-      ease: 'power2.out',
-    });
+  const handleItemEnter = (index: number) => setHoveredIndex(index);
+  const handleItemLeave = () => setHoveredIndex(null);
+  const toggleAccordion = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
   };
-
-  const handleItemEnter = (index: number) => {
-    if (isTouchDevice) return;
-    setActiveIndex(index);
-    if (imageRef.current) {
-      gsap.to(imageRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'expo.out',
-      });
-    }
-  };
-
-  const handleItemLeave = () => {
-    setActiveIndex(null);
-    if (imageRef.current) {
-      gsap.to(imageRef.current, {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.4,
-        ease: 'power2.out',
-      });
-    }
-  };
-
-  const services = servicesConfig.services;
 
   return (
     <section
       ref={sectionRef}
       id="services"
-      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
-      onMouseMove={handleMouseMove}
+      className="relative py-20 px-6 md:px-8 lg:px-16 bg-black overflow-hidden"
     >
-      {/* Floating image preview */}
-      <div
-        ref={imagePreviewRef}
-        className="preview-container fixed top-0 left-0 w-[400px] aspect-[4/5] pointer-events-none z-50 overflow-hidden rounded-sm border border-gold/30 gold-border-glow shadow-2xl"
-        style={{ opacity: 0, transform: 'scale(0.8) translate(-50%, -50%)', display: 'none' }}
-      >
-        {activeIndex !== null && (
-          <img
-            src={services[activeIndex].image}
-            alt={services[activeIndex].title}
-            className="w-full h-full object-cover"
-          />
-        )}
-      </div>
-
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
           <div>
@@ -190,53 +127,75 @@ export function Services() {
             </p>
           </div>
           <div className="hidden md:block">
-             <EmbeddedDiamond className="w-16 h-16" />
+            <EmbeddedDiamond className="w-16 h-16" />
           </div>
         </div>
 
-        {/* Services list */}
+        {/* Services accordion list */}
         <div className="space-y-0">
           {servicesConfig.services.map((service, index) => (
             <div
               key={index}
-              ref={(el) => { itemsRef.current[index] = el; }} // Keep ref for potential future animations
-              className="service-item group relative py-12 border-b border-gold/20 flex flex-col md:flex-row md:items-center justify-between cursor-pointer"
+              ref={(el) => { itemsRef.current[index] = el; }}
+              className="service-item group relative border-b border-gold/20"
               onMouseEnter={() => handleItemEnter(index)}
               onMouseLeave={handleItemLeave}
             >
-              {/* Service number & title */}
-              <div className="flex items-center gap-8 md:gap-16 mb-6 md:mb-0 z-10">
-                <span className="text-body text-gold/50 font-mono group-hover:text-gold group-hover:text-shadow-glow transition-all duration-300">
-                  {String(index + 1).padStart(2, '0')}.
-                </span>
-                <h3
-                  className={`text-h4 md:text-h3 lg:text-h2 text-white font-normal transition-all duration-400 ${activeIndex !== null && activeIndex !== index
-                    ? 'opacity-30'
-                    : 'opacity-100'
-                    } ${activeIndex === index
-                      ? 'text-shadow-glow'
-                      : ''
-                    }`}
-                  style={{
-                    textShadow:
-                      activeIndex === index
-                        ? '0 0 30px rgba(201,165,90,0.5)'
-                        : 'none',
-                  }}
-                >
-                  {service.title}
-                </h3>
+              <div
+                className="py-10 flex flex-col md:flex-row md:items-center justify-between cursor-pointer"
+                onClick={() => toggleAccordion(index)}
+              >
+                <div className="flex items-center gap-8 md:gap-16 z-10 w-full md:w-auto">
+                  <span className="text-body text-gold/50 font-mono group-hover:text-gold transition-all duration-300">
+                    {String(index + 1).padStart(2, '0')}.
+                  </span>
+                  <h3
+                    className={`text-h4 md:text-h3 lg:text-h2 text-white font-normal transition-all duration-400 ${hoveredIndex !== null && hoveredIndex !== index
+                      ? 'opacity-30'
+                      : 'opacity-100'
+                      } ${hoveredIndex === index
+                        ? 'text-shadow-glow'
+                        : ''
+                      }`}
+                    style={{
+                      textShadow:
+                        hoveredIndex === index
+                          ? '0 0 30px rgba(201,165,90,0.5)'
+                          : 'none',
+                    }}
+                  >
+                    {service.title}
+                  </h3>
+                </div>
+                <div className="text-gold/50 transition-colors duration-300 group-hover:text-gold hidden md:block">
+                  {expandedIndex === index ? <Minus className="w-8 h-8" /> : <Plus className="w-8 h-8" />}
+                </div>
               </div>
 
-              {/* Description */}
-              <p
-                className={`mt-4 lg:mt-0 text-body-sm md:text-body text-white/60 lg:text-white/40 lg:max-w-xs lg:text-right transition-opacity duration-300 ${activeIndex !== null && activeIndex !== index
-                  ? 'lg:opacity-30'
-                  : 'opacity-100'
-                  }`}
-              >
-                {service.description}
-              </p>
+              {/* Accordion body expand */}
+              <AnimatePresence>
+                {expandedIndex === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pb-12 pt-4 flex flex-col md:flex-row gap-8 lg:gap-16 items-start justify-between">
+                      <p className="text-body-lg text-white/70 leading-relaxed md:w-1/2">
+                        {service.description}
+                      </p>
+
+                      {service.image && (
+                        <div className="w-full md:w-1/2 aspect-[4/3] overflow-hidden rounded-md border border-gold/20">
+                          <img src={service.image} alt={service.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ))}
         </div>

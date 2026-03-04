@@ -171,7 +171,6 @@ export function Contact() {
             style={{
               transform: 'rotate(12deg) translateX(-50%)',
               transformOrigin: 'top center',
-              willChange: 'height',
             }}
           />
 
@@ -353,11 +352,12 @@ export function Contact() {
           <div
             ref={imageRef}
             className="relative aspect-[3/4] lg:aspect-auto overflow-hidden"
-            style={{ willChange: 'transform, clip-path' }}
           >
             <img
               src={contactConfig.image}
               alt="Contact"
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover"
             />
 

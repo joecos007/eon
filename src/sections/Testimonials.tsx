@@ -121,14 +121,14 @@ export function Testimonials() {
     <section
       ref={sectionRef}
       id="testimonials"
-      className="relative py-32 px-8 lg:px-16 bg-gradient-to-b from-dark-gray to-black overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 bg-gradient-to-b from-dark-gray to-black overflow-hidden"
       style={{ perspective: '1200px' }}
     >
       <div className="max-w-7xl mx-auto">
         {/* Section title */}
         <h2
           ref={titleRef}
-          className="text-h1 lg:text-display-xl text-white font-medium text-center mb-20"
+          className="text-h2 md:text-h1 lg:text-display-xl text-white font-medium text-center mb-12 md:mb-20"
         >
           {testimonialsConfig.title}
         </h2>
@@ -145,7 +145,6 @@ export function Testimonials() {
               style={{
                 top: `${index * 40}px`,
                 zIndex: index,
-                willChange: 'transform, opacity',
               }}
             >
               {/* Quote Icon */}
@@ -173,6 +172,8 @@ export function Testimonials() {
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                   </div>

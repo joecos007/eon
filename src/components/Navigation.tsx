@@ -11,6 +11,8 @@ export function Navigation() {
   const navRef = useRef<HTMLElement>(null);
   const logoIconRef = useRef<SVGSVGElement>(null);
   const logoTextRef = useRef<HTMLSpanElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
+  const buttonBoundsRef = useRef<DOMRect | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -101,6 +103,35 @@ export function Navigation() {
       target.scrollIntoView({ behavior: 'smooth' });
       setIsMobileMenuOpen(false);
     }
+  };
+
+  const handleButtonMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!buttonRef.current) return;
+    if (!buttonBoundsRef.current) {
+      buttonBoundsRef.current = buttonRef.current.getBoundingClientRect();
+    }
+    const bounds = buttonBoundsRef.current;
+
+    // Calculate distance from center (-1 to 1)
+    const x = ((e.clientX - bounds.left) / bounds.width - 0.5) * 2;
+    const y = ((e.clientY - bounds.top) / bounds.height - 0.5) * 2;
+
+    gsap.to(buttonRef.current, {
+      x: x * 15,
+      y: y * 15,
+      duration: 0.3,
+      ease: "power2.out"
+    });
+  };
+
+  const handleButtonMouseLeave = () => {
+    buttonBoundsRef.current = null;
+    gsap.to(buttonRef.current, {
+      x: 0,
+      y: 0,
+      duration: 0.7,
+      ease: "elastic.out(1, 0.3)"
+    });
   };
 
   const logoText = 'Lumora';
@@ -250,6 +281,17 @@ export function Navigation() {
                 <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-gold group-hover:w-full transition-all duration-300" />
               </a>
             ))}
+
+            <a
+              href="#contact"
+              ref={buttonRef}
+              onMouseMove={handleButtonMouseMove}
+              onMouseLeave={handleButtonMouseLeave}
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="px-6 py-2.5 rounded-sm border border-gold/50 text-gold text-body-sm tracking-widest uppercase hover:bg-gold hover:text-black transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] cursor-pointer"
+            >
+              Book Appointment
+            </a>
           </div>
 
           {/* Mobile menu button */}
