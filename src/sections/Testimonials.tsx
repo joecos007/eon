@@ -166,7 +166,7 @@ export function Testimonials() {
 
                 {/* Author */}
                 <div className="flex items-center gap-6 mt-12">
-                  <div className="avatar-wrapper relative w-16 h-16 rounded-none overflow-hidden border border-gold/40 shadow-[0_0_15px_rgba(201,165,90,0.2)] flex-shrink-0">
+                  <div className="avatar avatar-wrapper relative w-16 h-16 rounded-none overflow-hidden border border-gold/40 shadow-[0_0_15px_rgba(201,165,90,0.2)] flex-shrink-0">
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}

@@ -27,6 +27,7 @@ export function ParticleField() {
 
     // Detect capabilities
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     // Rich starfield
     const particleCount = isTouchDevice ? 50 : 120;
 
@@ -160,8 +161,8 @@ export function ParticleField() {
         const colorBase = p.isGold ? '201, 165, 90' : '255, 255, 255';
         ctx.fillStyle = `rgba(${colorBase}, ${finalOpacity})`;
 
-        // Shadow blur (glow) — disabled on mobile for GPU performance
-        if (!isTouchDevice && (finalSize > 1.5 || interactionOpacity > 0.2)) {
+        // Shadow blur (glow) — disabled on mobile/reduced-motion for performance
+        if (!isTouchDevice && !prefersReducedMotion && (finalSize > 1.5 || interactionOpacity > 0.2)) {
           ctx.shadowBlur = finalSize * 3;
           ctx.shadowColor = `rgba(${colorBase}, ${finalOpacity})`;
         } else {
