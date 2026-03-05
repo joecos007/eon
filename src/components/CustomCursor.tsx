@@ -73,7 +73,7 @@ export function CustomCursor() {
       className={`fixed top-0 left-0 pointer-events-none z-[10000] mix-blend-screen transition-[width,height] duration-200 ease-out rounded-full ${isHovering ? 'w-12 h-12' : 'w-8 h-8'
         }`}
       style={{
-        background: 'rgba(234, 0, 0, 0.3)',
+        background: 'rgba(201, 165, 90, 0.3)',
         willChange: 'transform',
       }}
     />

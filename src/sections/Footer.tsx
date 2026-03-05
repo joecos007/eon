@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Instagram, Dribbble, ArrowUpRight } from 'lucide-react';
 import { footerConfig } from '../config';
+import { EmbeddedDiamond } from '../components/EmbeddedDiamond';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,11 +15,15 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export function Footer() {
   const sectionRef = useRef<HTMLElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
+  const marqueeContentRef = useRef<HTMLDivElement>(null);
   const linksCol1Ref = useRef<(HTMLAnchorElement | null)[]>([]);
   const linksCol2Ref = useRef<(HTMLAnchorElement | null)[]>([]);
   const copyrightRef = useRef<HTMLDivElement>(null);
   const borderRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const marqueeTweenRef = useRef<gsap.core.Tween | null>(null);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (!footerConfig.copyright) return;
@@ -26,18 +31,32 @@ export function Footer() {
     const section = sectionRef.current;
     if (!section) return;
 
+    const startMarquee = () => {
+      if (!marqueeContentRef.current || prefersReducedMotion) return;
+      marqueeTweenRef.current?.kill();
+      const contentWidth = marqueeContentRef.current.scrollWidth / 2;
+      marqueeTweenRef.current = gsap.to(marqueeContentRef.current, {
+        x: -contentWidth,
+        duration: 20,
+        ease: 'none',
+        repeat: -1,
+      });
+    };
+
+    let resizeTimer: number | undefined;
+    const handleResize = () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(startMarquee, 200);
+    };
+
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top 90%',
       onEnter: () => {
         const tl = gsap.timeline();
 
-        // Marquee fade in and start
-        tl.fromTo(
-          marqueeRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 1, ease: 'power2.out' }
-        );
+        // Infinite Marquee Scroll
+        startMarquee();
 
         // Top border draw
         tl.fromTo(
@@ -78,16 +97,21 @@ export function Footer() {
           { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' },
           '-=0.2'
         );
+
+        window.addEventListener('resize', handleResize, { passive: true });
       },
       once: true,
     });
     triggersRef.current.push(trigger);
 
     return () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      window.removeEventListener('resize', handleResize);
+      marqueeTweenRef.current?.kill();
       triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   if (!footerConfig.copyright) return null;
 
@@ -109,10 +133,14 @@ export function Footer() {
         <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-black to-transparent z-10" />
 
         {/* Marquee content */}
-        <div className="marquee-container">
-          <div className="marquee-content flex items-center gap-4 md:gap-8 text-[36px] md:text-[56px] lg:text-[112px] font-medium whitespace-nowrap">
-            {[...Array(4)].map((_, i) => (
-              <span key={i} className="flex items-center gap-8">
+        <div className="flex w-full overflow-hidden">
+          <div
+            ref={marqueeContentRef}
+            className="flex items-center text-[36px] md:text-[56px] lg:text-[112px] font-medium whitespace-nowrap will-change-transform flex-nowrap w-max"
+          >
+            {/* Two copies for seamless infinite scroll */}
+            {[...Array(2)].map((_, i) => (
+              <span key={i} className="flex items-center gap-4 md:gap-8 px-4 md:px-8 whitespace-nowrap shrink-0">
                 {marqueeText.split('').map((char, j) => (
                   <span
                     key={j}
@@ -130,7 +158,7 @@ export function Footer() {
                     {char}
                   </span>
                 ))}
-                <span className="text-white/30 mx-4">&bull;</span>
+                <span className="text-white/30">&bull;</span>
               </span>
             ))}
           </div>
@@ -141,7 +169,6 @@ export function Footer() {
       <div
         ref={borderRef}
         className="h-px bg-gold/20 mb-16"
-        style={{ willChange: 'width' }}
       />
 
       {/* Footer content */}
@@ -204,7 +231,7 @@ export function Footer() {
               className="inline-flex items-center gap-3 text-h5 lg:text-h4 text-white font-medium group hover:text-gold transition-colors duration-300"
             >
               {footerConfig.ctaText}
-              <span className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:border-gold group-hover:shadow-[0_0_15px_var(--gold)] transition-all duration-300">
+              <span className="w-10 h-10 rounded-none border border-white/30 flex items-center justify-center group-hover:border-gold group-hover:shadow-[0_0_15px_var(--gold)] transition-all duration-300">
                 <ArrowUpRight className="w-5 h-5 group-hover:text-gold" />
               </span>
             </a>
@@ -214,18 +241,24 @@ export function Footer() {
         {/* Copyright */}
         <div
           ref={copyrightRef}
-          className="mt-20 pt-8 border-t border-white/10 flex flex-col lg:flex-row justify-between items-center gap-4"
+          className="mt-20 pt-8 border-t border-white/20 flex flex-col items-center gap-6"
         >
-          <p className="text-body-sm text-white/40">
-            {footerConfig.copyright}
-          </p>
-          <p className="text-body-sm text-white/30">
-            {footerConfig.tagline}
-          </p>
+          <EmbeddedDiamond className="w-8 h-8 opacity-80" />
+          <div className="flex flex-col lg:flex-row w-full justify-between items-center gap-4">
+            <p className="text-body-sm text-white/70">
+              {footerConfig.copyright}
+            </p>
+            <p className="text-body-sm text-white/60">
+              {footerConfig.tagline}
+            </p>
+          </div>
         </div>
-        <div className="mt-4 text-center">
-          <p className="text-body-sm text-white/25 tracking-wide">
-            Fueled by Caffeine &amp; Code. Crafted by <span className="text-gold/60">Oliver Oinam</span>
+        <div className="mt-4 flex flex-col items-center gap-1">
+          <p className="text-body-sm text-white/50 tracking-wide">
+            {footerConfig.developerCreditLine1}
+          </p>
+          <p className="text-body-sm text-gold/80 tracking-widest font-medium uppercase">
+            {footerConfig.developerCreditLine2}
           </p>
         </div>
       </div>

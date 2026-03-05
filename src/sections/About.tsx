@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { aboutConfig } from '../config';
+import { EmbeddedDiamond } from '../components/EmbeddedDiamond';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,10 +12,14 @@ export function About() {
 
   const authorImageRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const textRef = useRef<HTMLParagraphElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const authorTextRef = useRef<HTMLDivElement>(null);
   const triggersRef = useRef<ScrollTrigger[]>([]);
+  const isTouchDevice = typeof window !== 'undefined'
+    && (window.innerWidth < 768 || window.matchMedia('(hover: none)').matches);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (!aboutConfig.titleLine1) return;
@@ -109,46 +114,71 @@ export function About() {
     });
     triggersRef.current.push(trigger);
 
-    // Parallax on scroll
-    const parallaxTrigger = ScrollTrigger.create({
-      trigger: section,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 1,
-      onUpdate: (self) => {
-        if (image1Ref.current) {
-          gsap.set(image1Ref.current, {
-            y: 50 - self.progress * 100,
-          });
-        }
-        if (authorImageRef.current) {
-          gsap.set(authorImageRef.current, {
-            y: 30 - self.progress * 60,
-          });
-        }
-      },
-    });
-    triggersRef.current.push(parallaxTrigger);
+    // Parallax on scroll — skip on mobile/reduced-motion to prevent jank
+    if (!isTouchDevice && !prefersReducedMotion) {
+      const parallaxTrigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: (self) => {
+          if (image1Ref.current) {
+            gsap.set(image1Ref.current, {
+              y: 50 - self.progress * 100,
+            });
+          }
+          if (authorImageRef.current) {
+            gsap.set(authorImageRef.current, {
+              y: 30 - self.progress * 60,
+            });
+          }
+          if (textRef.current) {
+            gsap.set(textRef.current, {
+              y: 20 - self.progress * 40,
+            });
+          }
+        },
+      });
+      triggersRef.current.push(parallaxTrigger);
+    }
 
     return () => {
       triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
     };
-  }, []);
+  }, [isTouchDevice, prefersReducedMotion]);
 
   if (!aboutConfig.titleLine1) return null;
 
-  const authorTextChars = aboutConfig.authorBio.split('');
+  const authorWords = aboutConfig.authorBio.split(' ');
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (isTouchDevice || !sectionRef.current) return;
+    const { left, top } = sectionRef.current.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+    sectionRef.current.style.setProperty("--mouse-x", `${x}px`);
+    sectionRef.current.style.setProperty("--mouse-y", `${y}px`);
+  };
 
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 overflow-hidden"
-      style={{ transform: 'rotate(0deg)' }}
+      onMouseMove={handleMouseMove}
+      className="relative py-20 md:py-32 px-6 md:px-8 lg:px-16 overflow-hidden group/section"
+      style={{ isolation: 'isolate' }}
     >
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0806] to-black z-0" />
+
+      {/* Interactive flashlight layer */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 opacity-0 group-hover/section:opacity-100 transition-opacity duration-500"
+        style={{
+          background: "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(201, 165, 90, 0.05), transparent 40%)"
+        }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section layout */}
@@ -157,12 +187,13 @@ export function About() {
           <div className="lg:col-span-5 relative">
             <div
               ref={image1Ref}
-              className="relative w-full h-[600px] lg:h-full min-h-[500px] overflow-hidden rounded-sm group cursor-pointer"
-              style={{ willChange: 'clip-path, transform' }}
+              className="relative w-full h-[600px] lg:h-full min-h-[500px] overflow-hidden rounded-none group cursor-pointer"
             >
               <img
-                src="/lumora-asset.png"
-                alt="Lumora Jewels Online Store"
+                src={aboutConfig.image1}
+                alt={aboutConfig.image1Alt}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -185,41 +216,49 @@ export function About() {
               </span>
             </h2>
 
-            {/* Custom line art */}
-            <div
-              ref={lineRef}
-              className="h-px bg-gradient-to-r from-transparent via-gold to-transparent mb-8"
-              style={{ willChange: 'width' }}
-            />
+            {/* Custom line art and Embedded Diamond */}
+            <div className="relative mb-12 flex items-center h-12">
+              <div
+                ref={lineRef}
+                className="absolute left-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent z-0"
+                style={{ top: '50%' }}
+              />
+              <div className="absolute right-12 z-10 transform translate-x-1/2">
+                <EmbeddedDiamond className="w-10 h-10" />
+              </div>
+            </div>
 
             {/* About text */}
-            <p
-              ref={textRef}
-              className="text-body-lg text-white/70 leading-relaxed mb-12"
-            >
-              {aboutConfig.description}
-            </p>
+            <div ref={textRef} className="mb-12 space-y-6">
+              {aboutConfig.description.split(/(?<=\.)\s+(?=[A-Z])/).map((paragraph, index) => (
+                <p key={index} className="text-body-lg text-white/70 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
 
             {/* Author section */}
             <div className="flex items-start gap-6">
               {/* Author image */}
               <div
                 ref={authorImageRef}
-                className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-full border border-gold/40"
-                style={{ willChange: 'transform, opacity' }}
+                className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-none border border-gold/40 relative group cursor-pointer"
               >
                 <img
                   src={aboutConfig.authorImage}
                   alt={aboutConfig.authorName}
-                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover filter blur-[2px] opacity-90 group-hover:blur-0 group-hover:opacity-100 transition-all duration-700"
                 />
+                <div className="absolute inset-0 bg-gold/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700"></div>
               </div>
 
               {/* Author text */}
               <div ref={authorTextRef} className="text-body text-white/60">
-                {authorTextChars.map((char, i) => (
+                {authorWords.map((word, i) => (
                   <span key={i} className="word inline">
-                    {char}
+                    {word}{i < authorWords.length - 1 ? ' ' : ''}
                   </span>
                 ))}
               </div>

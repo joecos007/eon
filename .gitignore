@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build artifacts
+build_errors.txt
+
+# Test artifacts
+test-results/
+playwright-report/
