@@ -127,6 +127,16 @@ export function Blog() {
     }
   }, [expandedId]);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (expandedId !== null) {
+      lockScroll();
+      return () => {
+        unlockScroll();
+      };
+    }
+  }, [expandedId]);
+
   const handleButtonMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (prefersReducedMotion) return;
     if (!buttonRef.current) return;

@@ -49,7 +49,7 @@ export function FAQ() {
     triggersRef.current.push(trigger);
 
     return () => {
-      triggersRef.current.forEach((t) => { t.kill(); });
+      triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
     };
   }, []);

@@ -108,7 +108,7 @@ export function Footer() {
       if (resizeTimer) clearTimeout(resizeTimer);
       window.removeEventListener('resize', handleResize);
       marqueeTweenRef.current?.kill();
-      triggersRef.current.forEach((t) => { t.kill(); });
+      triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
     };
   }, [prefersReducedMotion]);

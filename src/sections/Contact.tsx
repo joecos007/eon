@@ -163,7 +163,7 @@ export function Contact() {
     }
 
     return () => {
-      triggersRef.current.forEach((t) => { t.kill(); });
+      triggersRef.current.forEach((t) => t.kill());
       triggersRef.current = [];
     };
   }, [isTouchDevice, prefersReducedMotion]);
